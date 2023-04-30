@@ -1,5 +1,4 @@
-﻿using InventoryAppAPI.Entities.Base;
-using InventoryAppAPI.Entities.Dicts;
+﻿using InventoryAppAPI.Entities.Dicts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
