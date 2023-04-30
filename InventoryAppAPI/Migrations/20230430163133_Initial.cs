@@ -13,10 +13,13 @@ namespace InventoryAppAPI.Migrations
                 name: "dict");
 
             migrationBuilder.CreateTable(
-                name: "Entity",
+                name: "Buildings",
+                schema: "dict",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -24,25 +27,7 @@ namespace InventoryAppAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Entity", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Buildings",
-                schema: "dict",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
-                },
-                constraints: table =>
-                {
                     table.PrimaryKey("PK_Buildings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Buildings_Entity_Id",
-                        column: x => x.Id,
-                        principalTable: "Entity",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -50,17 +35,17 @@ namespace InventoryAppAPI.Migrations
                 schema: "dict",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Entity_Id",
-                        column: x => x.Id,
-                        principalTable: "Entity",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -68,17 +53,17 @@ namespace InventoryAppAPI.Migrations
                 schema: "dict",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Rooms_Entity_Id",
-                        column: x => x.Id,
-                        principalTable: "Entity",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -86,9 +71,14 @@ namespace InventoryAppAPI.Migrations
                 schema: "dict",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BuildingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoomId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuildingId = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -100,11 +90,6 @@ namespace InventoryAppAPI.Migrations
                         principalTable: "Buildings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Locations_Entity_Id",
-                        column: x => x.Id,
-                        principalTable: "Entity",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Locations_Rooms_RoomId",
                         column: x => x.RoomId,
@@ -118,10 +103,11 @@ namespace InventoryAppAPI.Migrations
                 name: "StockItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: false),
                     IsArchive = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     InventoriedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InventoriedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -188,9 +174,6 @@ namespace InventoryAppAPI.Migrations
             migrationBuilder.DropTable(
                 name: "Rooms",
                 schema: "dict");
-
-            migrationBuilder.DropTable(
-                name: "Entity");
         }
     }
 }
