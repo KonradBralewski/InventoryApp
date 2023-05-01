@@ -1,8 +1,7 @@
-﻿using InventoryAppAPI.Entities.Dicts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace InventoryAppAPI.Entities.Configurations
+namespace InventoryAppAPI.DAL.Entities.Configurations
 {
     public class StockItemsConfiguration : IEntityTypeConfiguration<StockItems>
     {

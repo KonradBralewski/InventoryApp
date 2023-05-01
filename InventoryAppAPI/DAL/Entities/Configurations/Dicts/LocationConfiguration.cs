@@ -1,8 +1,8 @@
-﻿using InventoryAppAPI.Entities.Dicts;
+﻿using InventoryAppAPI.DAL.Entities.Dicts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace InventoryAppAPI.Entities.Configurations.Dicts
+namespace InventoryAppAPI.DAL.Entities.Configurations.Dicts
 {
     public class LocationConfiguration : IEntityTypeConfiguration<Location>
     {
@@ -11,7 +11,7 @@ namespace InventoryAppAPI.Entities.Configurations.Dicts
             eb.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
             eb.Property(e => e.CreatedBy).HasMaxLength(100);
             eb.Property(e => e.ModifiedBy).HasMaxLength(100);
-            eb.ToTable<Location>("Locations", "dict");
+            eb.ToTable("Locations", "dict");
         }
     }
 }

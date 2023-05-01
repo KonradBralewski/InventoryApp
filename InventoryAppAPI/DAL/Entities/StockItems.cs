@@ -1,6 +1,6 @@
-﻿using InventoryAppAPI.Entities.Dicts;
+﻿using InventoryAppAPI.DAL.Entities.Dicts;
 
-namespace InventoryAppAPI.Entities
+namespace InventoryAppAPI.DAL.Entities
 {
     public class StockItems
     {

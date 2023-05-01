@@ -1,6 +1,6 @@
-﻿namespace InventoryAppAPI.Entities.Dicts
+﻿namespace InventoryAppAPI.DAL.Entities.Dicts
 {
-    public class Building 
+    public class Building
     {
         public int Id { get; set; }
         public string Name { get; set; }

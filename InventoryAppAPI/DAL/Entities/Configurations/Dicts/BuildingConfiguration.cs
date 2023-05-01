@@ -1,8 +1,8 @@
-﻿using InventoryAppAPI.Entities.Dicts;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using InventoryAppAPI.DAL.Entities.Dicts;
 
-namespace InventoryAppAPI.Entities.Configurations.Dicts
+namespace InventoryAppAPI.DAL.Entities.Configurations.Dicts
 {
     public class BuildingConfiguration : IEntityTypeConfiguration<Building>
     {

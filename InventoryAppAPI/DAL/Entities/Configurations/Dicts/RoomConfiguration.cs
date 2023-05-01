@@ -1,8 +1,8 @@
-﻿using InventoryAppAPI.Entities.Dicts;
+﻿using InventoryAppAPI.DAL.Entities.Dicts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace InventoryAppAPI.Entities.Configurations.Dicts
+namespace InventoryAppAPI.DAL.Entities.Configurations.Dicts
 {
     public class RoomConfiguration : IEntityTypeConfiguration<Room>
     {

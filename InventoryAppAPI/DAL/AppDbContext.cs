@@ -1,10 +1,11 @@
-﻿using InventoryAppAPI.Entities.Dicts;
+﻿using InventoryAppAPI.DAL.Entities;
+using InventoryAppAPI.DAL.Entities.Dicts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using System.Security.Cryptography.X509Certificates;
 
-namespace InventoryAppAPI.Entities
+namespace InventoryAppAPI.DAL
 {
     public class AppDbContext : DbContext
     {
@@ -18,7 +19,7 @@ namespace InventoryAppAPI.Entities
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
 
