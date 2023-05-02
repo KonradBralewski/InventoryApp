@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryAppAPI", "InventoryAppAPI.csproj", "{7A25E94A-F394-4EAB-ACF8-4008603D2019}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryAppAPI", "InventoryAppAPI.csproj", "{7A25E94A-F394-4EAB-ACF8-4008603D2019}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryAppAPI.UnitTests", "..\TestsAPI\InventoryAppAPI.UnitTests\InventoryAppAPI.UnitTests.csproj", "{404C432B-283D-4D84-83E9-9E8A5BD1805B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7A25E94A-F394-4EAB-ACF8-4008603D2019}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A25E94A-F394-4EAB-ACF8-4008603D2019}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A25E94A-F394-4EAB-ACF8-4008603D2019}.Release|Any CPU.Build.0 = Release|Any CPU
+		{404C432B-283D-4D84-83E9-9E8A5BD1805B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{404C432B-283D-4D84-83E9-9E8A5BD1805B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{404C432B-283D-4D84-83E9-9E8A5BD1805B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{404C432B-283D-4D84-83E9-9E8A5BD1805B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

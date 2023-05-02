@@ -1,6 +1,7 @@
 ﻿using InventoryAppAPI.BLL.Services;
 using InventoryAppAPI.BLL.Services.Authentication;
 using InventoryAppAPI.BLL.Services.Email;
+using InventoryAppAPI.BLL.Token;
 using InventoryAppAPI.DAL;
 using InventoryAppAPI.DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -58,6 +59,7 @@ namespace InventoryAppAPI.Extensions
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ITokenManager, TokenManager>();
         }
 
         public static void AddAuth(this IServiceCollection services, ConfigurationManager cfg)

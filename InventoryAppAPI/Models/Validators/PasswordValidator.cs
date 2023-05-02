@@ -7,7 +7,7 @@ namespace InventoryAppAPI.Models.Validators
     {
         public static void Validate(string password, string oldPassword = null)
         {
-            var regexPassword = new Regex("^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\\d)[A-Za-z\\d!@#$%^&*]{8,}$");
+            var regexPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$";
 
             if (oldPassword != null)
             {
@@ -23,7 +23,7 @@ namespace InventoryAppAPI.Models.Validators
 
             }
 
-            if (!regexPassword.IsMatch(password))
+            if (!Regex.Match(password, regexPattern).Success)
             {
                 throw new RequestException(StatusCodes.Status422UnprocessableEntity,
                     "Password must contain at least one uppercase letter, one special character (!@#$%^&*) and one digit.");

@@ -7,7 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace InventoryAppAPI.DAL
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<StockItems> StockItems { get; set; }
@@ -19,6 +19,7 @@ namespace InventoryAppAPI.DAL
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
