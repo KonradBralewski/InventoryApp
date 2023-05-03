@@ -1,4 +1,5 @@
 ﻿using InventoryAppAPI.BLL.Services.Authentication;
+using InventoryAppAPI.BLL.Services.Email;
 using InventoryAppAPI.Models.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace InventoryAppAPI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly IEmailService _emailService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService, IEmailService emailService)
         {
             _authenticationService = authenticationService;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]
@@ -25,6 +28,10 @@ namespace InventoryAppAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(LoginRegisterRequest request)
         {
+            var response = await _authenticationService.Register(request);
+
+            _emailService.SendEmailConfirmation(request.Email);
+
             return Ok(await _authenticationService.Register(request));
         }
     }

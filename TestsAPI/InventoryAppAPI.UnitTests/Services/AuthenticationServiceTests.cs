@@ -23,16 +23,14 @@ namespace InventoryAppAPI.UnitTests.Services
 
         // MOCKS
         private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
-        private readonly Mock<IEmailService> _emailServiceMock;
         private readonly Mock<ITokenManager> _tokenManagerMock;
 
         public AuthenticationServiceTests()
         {
             _userManagerMock = UserManagerMock.MockUserManager(_users);
-            _emailServiceMock = EmailServiceMock.MockEmailService();
             _tokenManagerMock = TokenManagerMock.MockTokenManager();
 
-            _authService = new AuthenticationService(_userManagerMock.Object, _emailServiceMock.Object, _tokenManagerMock.Object);
+            _authService = new AuthenticationService(_userManagerMock.Object, _tokenManagerMock.Object);
         }
 
         // REGISTER
@@ -159,29 +157,6 @@ namespace InventoryAppAPI.UnitTests.Services
                 .Returns(Task.FromResult(true));
 
             request.Email = request.Email.Replace(".", ",");
-
-            // Act & Assert
-            await Assert.ThrowsAsync<RequestException>(() => _authService.Login(request));
-        }
-
-        [Fact]
-        public async Task Login_UnconfirmedEmailRequestGiven_ThrowsRequestException()
-        {
-            // Arrange
-            LoginRegisterRequest request = new LoginRegisterRequest
-            {
-                Email = "johndoe@doe.com",
-                Password = "Testpassw@rd1"
-            };
-
-            var user = new ApplicationUser
-            {
-                Email = request.Email,
-                EmailConfirmed = false,
-                SecurityStamp = Guid.NewGuid().ToString()
-            };
-
-            _users.Add(user);
 
             // Act & Assert
             await Assert.ThrowsAsync<RequestException>(() => _authService.Login(request));

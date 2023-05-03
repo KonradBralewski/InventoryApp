@@ -18,13 +18,11 @@ namespace InventoryAppAPI.BLL.Services
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailService _emailService;
         private readonly ITokenManager _tokenManager;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager, IEmailService emailService, ITokenManager tokenManager)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, ITokenManager tokenManager)
         {
             _userManager = userManager;
-            _emailService = emailService;
             _tokenManager = tokenManager;
         }
         public async Task<AuthenticationResponse> Login(LoginRegisterRequest dto)
@@ -33,12 +31,6 @@ namespace InventoryAppAPI.BLL.Services
 
             if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
             {
-
-                if (user.EmailConfirmed == false)
-                {
-                    throw new RequestException(StatusCodes.Status403Forbidden, "Email is not confirmed.");
-                }
-
                 var tokenModel = await _tokenManager.GenerateToken(user);
 
                 await UserUpdateRoutine(user, tokenModel);
@@ -78,14 +70,6 @@ namespace InventoryAppAPI.BLL.Services
             if (!result.Succeeded)
             {
                 throw new RequestException(StatusCodes.Status500InternalServerError, "User creation failed due to an error. Please try again later.");
-            }
-
-            var isEmailSend = _emailService.SendEmailConfirmation(dto.Email!);
-
-            if (isEmailSend == false)
-            {
-                throw new RequestException(StatusCodes.Status500InternalServerError,
-                    "User created but activation link email was not sent due to an error. Please try to resend email again.");
             }
 
             await _userManager.AddToRoleAsync(user, UserRoles.User);

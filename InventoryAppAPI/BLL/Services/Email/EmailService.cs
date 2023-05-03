@@ -1,4 +1,5 @@
-﻿using MailKit.Net.Smtp;
+﻿using InventoryAppAPI.Exceptions;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
@@ -18,7 +19,7 @@ namespace InventoryAppAPI.BLL.Services.Email
         public bool SendEmailConfirmation(string receiverEmail)
         {
             var smtp = new SmtpClient();
-            bool result;
+            bool result = false;
             try
             {
                 // create message
@@ -37,13 +38,15 @@ namespace InventoryAppAPI.BLL.Services.Email
                 smtp.Send(email);
                 result = true;
             }
-            catch
-            {
-                result = false;
-            }
             finally
             {
                 smtp.Disconnect(true);
+
+                if(!result)
+                {
+                    throw new RequestException(StatusCodes.Status500InternalServerError,
+                        "User exists yet confirmation email could not be sent due an error. Please try again later");
+                }
             }
 
             return result;

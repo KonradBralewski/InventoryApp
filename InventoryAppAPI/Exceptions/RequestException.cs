@@ -4,7 +4,7 @@
     {
         public int StatusCode { get; set; }
 
-        public RequestException(int statusCode, string msg) : base(msg) 
+        public RequestException(int statusCode, string msg) :   base(msg) 
         {
             StatusCode = statusCode;
         }

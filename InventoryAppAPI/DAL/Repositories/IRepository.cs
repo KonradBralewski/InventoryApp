@@ -1,14 +1,15 @@
-﻿using InventoryAppAPI.Models;
+﻿using InventoryAppAPI.DAL.Entities;
+using System.Linq.Expressions;
 
 namespace InventoryAppAPI.DAL.Repositories
 {
     public interface IRepository<T>
     {
-        Task<dynamic> GetByIdAsync(Guid id);
-        Task<dynamic> ListAsync();
-        Task<Response> AddAsync(T dto);
-        Task<Response> DeleteAsync(Guid id);
-        Task<Response> UpdateAsync(T dto);
+        Task<StockItems> GetByIdAsync(int id);
+        Task<IEnumerable<StockItems>> GetListAsync(Expression<Func<T, bool>> predicate);
+        Task<StockItems> AddAsync(T dto);
+        Task<StockItems> UpdateAsync(T dto);
+        Task<bool> DeleteAsync(int id);
     }
 
 }
