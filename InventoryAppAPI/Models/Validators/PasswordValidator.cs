@@ -23,7 +23,7 @@ namespace InventoryAppAPI.Models.Validators
 
             }
 
-            if (!Regex.Match(password, regexPattern).Success)
+            if (!Regex.IsMatch(password, regexPattern))
             {
                 throw new RequestException(StatusCodes.Status422UnprocessableEntity,
                     "Password must contain at least one uppercase letter, one special character (!@#$%^&*) and one digit.");

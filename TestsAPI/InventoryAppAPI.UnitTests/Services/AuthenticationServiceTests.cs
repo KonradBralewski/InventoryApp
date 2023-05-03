@@ -22,21 +22,25 @@ namespace InventoryAppAPI.UnitTests.Services
         private List<ApplicationUser> _users = new List<ApplicationUser>();
 
         // MOCKS
-        private readonly UserManager<ApplicationUser> _userManagerMock;
-        private readonly IEmailService _emailServiceMock;
-        private readonly ITokenManager _tokenManagerMock;
+        private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
+        private readonly Mock<IEmailService> _emailServiceMock;
+        private readonly Mock<ITokenManager> _tokenManagerMock;
 
         public AuthenticationServiceTests()
         {
-            _userManagerMock = UserManagerMock.MockUserManager<ApplicationUser>(_users).Object;
-            _emailServiceMock = EmailServiceMock.MockEmailService().Object;
-            _tokenManagerMock = TokenManagerMock.MockTokenManager().Object;
+            _userManagerMock = UserManagerMock.MockUserManager(_users);
+            _emailServiceMock = EmailServiceMock.MockEmailService();
+            _tokenManagerMock = TokenManagerMock.MockTokenManager();
 
-            _authService = new AuthenticationService(_userManagerMock, _emailServiceMock, _tokenManagerMock);
+            _authService = new AuthenticationService(_userManagerMock.Object, _emailServiceMock.Object, _tokenManagerMock.Object);
         }
 
+        // REGISTER
+        // REGISTER
+        // REGISTER
+
         [Fact]
-        public async Task Register_ValidRequestGiven_ShouldRegisterUser_ShouldReturnAuthenticationResponse()
+        public async Task Register_UniqueCredentialsRequestGiven_ShouldRegisterUser_ShouldReturnAuthenticationResponse()
         {
             // Arrange
             var request = new LoginRegisterRequest
@@ -47,17 +51,18 @@ namespace InventoryAppAPI.UnitTests.Services
 
             // Act
             var result = await _authService.Register(request);
-            zz
+
             // Assert
+            Assert.True(_users.Count() > 0);
             Assert.NotNull(result);
             Assert.Equal(request.Email, result.Email);
             Assert.NotNull(result.Token);
             Assert.NotNull(result.RefreshToken);
-            Assert.NotEqual(default, result.ExpirationTime);
+            Assert.NotEqual(DateTime.MinValue, result.ExpirationTime);
         }
 
         [Fact]
-        public async Task Register_GivenExistingUserRequest_ShouldThrowRequestException()
+        public async Task Register_ExistingUserRequestGiven_ShouldThrowRequestException()
         {
             // Arrange
             var existingUser = new ApplicationUser { Email = "john.doe@example.com" };
@@ -78,25 +83,24 @@ namespace InventoryAppAPI.UnitTests.Services
         [InlineData("john.doe@")]
         [InlineData("john.doe@.")]
         [InlineData("john.doe@.com")]
-        public async Task Register_GivenInvalidEmailRequest_ShouldThrowRequestException(string email)
+        public async Task Register_InvalidEmailRequestGiven_ShouldThrowRequestException(string email)
         {
             // Arrange
             var request = new LoginRegisterRequest
             {
                 Email = email,
-                Password = "Abcd1234"
+                Password = "Abcd1234@"
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<RequestException>(() => _authService.Register(request));
+            await Assert.ThrowsAsync<RequestException>(async () => await _authService.Register(request));
         }
 
         [Theory]
         [InlineData("Abcd1234")]
         [InlineData("abcd1234")]
-        [InlineData("Abcd123!")]
         [InlineData("1234abcd")]
-        public async Task Register_GivenInvalidPasswordRequest_ShouldThrowRequestException(string password)
+        public async Task Register_InvalidPasswordRequestGiven_ShouldThrowRequestException(string password)
         {
             // Arrange
             var request = new LoginRegisterRequest
@@ -106,7 +110,81 @@ namespace InventoryAppAPI.UnitTests.Services
             };
 
             // Act & Assert
-            await Assert.ThrowsAsync<RequestException>(() => _authService.Register(request));
+            await Assert.ThrowsAsync<RequestException>(async () => await _authService.Register(request));
+        }
+
+
+        // LOGIN
+        // LOGIN
+        // LOGIN
+
+        [Fact]
+        public async Task Login_ExistingCredentialsGiven_ReturnsAuthenticationResponse()
+        {
+            // Arrange
+            LoginRegisterRequest request = new LoginRegisterRequest{
+                Email = "johndoe@doe.com",
+                Password = "Testpassw@rd1"
+            };
+
+            await _authService.Register(request);
+
+            _userManagerMock.Setup(m => m.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(true));
+
+            // Act
+            var result = await _authService.Login(request);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(request.Email, result.Email);
+            Assert.NotEmpty(result.Token);
+            Assert.NotEmpty(result.RefreshToken);
+            Assert.NotEqual(DateTime.MinValue, result.ExpirationTime);
+        }
+
+        [Fact]
+        public async Task Login_InvalidCredentialsRequestGiven_ThrowsRequestException()
+        {
+            // Arrange
+            LoginRegisterRequest request = new LoginRegisterRequest
+            {
+                Email = "johndoe@doe.com",
+                Password = "Testpassw@rd1"
+            };
+
+            await _authService.Register(request);
+
+            _userManagerMock.Setup(m => m.CheckPasswordAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(true));
+
+            request.Email = request.Email.Replace(".", ",");
+
+            // Act & Assert
+            await Assert.ThrowsAsync<RequestException>(() => _authService.Login(request));
+        }
+
+        [Fact]
+        public async Task Login_UnconfirmedEmailRequestGiven_ThrowsRequestException()
+        {
+            // Arrange
+            LoginRegisterRequest request = new LoginRegisterRequest
+            {
+                Email = "johndoe@doe.com",
+                Password = "Testpassw@rd1"
+            };
+
+            var user = new ApplicationUser
+            {
+                Email = request.Email,
+                EmailConfirmed = false,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            _users.Add(user);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<RequestException>(() => _authService.Login(request));
         }
     }
 }

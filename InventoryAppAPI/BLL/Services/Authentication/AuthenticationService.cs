@@ -65,6 +65,7 @@ namespace InventoryAppAPI.BLL.Services
             }
 
             Models.Validators.PasswordValidator.Validate(dto.Password);
+            Models.Validators.EmailValidator.Validate(dto.Email);
 
             ApplicationUser user = new()
             {

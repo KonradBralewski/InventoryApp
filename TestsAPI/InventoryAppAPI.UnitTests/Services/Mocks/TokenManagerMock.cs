@@ -24,7 +24,8 @@ namespace InventoryAppAPI.UnitTests.Services.Mocks
                    AccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9." +
                "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ." +
                "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
-                   RefreshToken = "5c877e4a-6b4a-4b1a-8f0a-2d8b8b4e5d0a"
+                   RefreshToken = "5c877e4a-6b4a-4b1a-8f0a-2d8b8b4e5d0a",
+                   RefreshTokenExpiryTime = DateTime.Now.AddDays(7)
                }));
               
 
