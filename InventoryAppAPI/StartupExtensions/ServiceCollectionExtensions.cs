@@ -16,7 +16,7 @@ namespace InventoryAppAPI.Extensions
     public static class ServiceCollectionExtensions
     {
         private static readonly IConfiguration _config;
-        public static String policyName = "_myAllowSpecificOrigins";
+        public static string policyName = "_myAllowSpecificOrigins";
         public static void ConfigureCors(this IServiceCollection services)
         {
 
