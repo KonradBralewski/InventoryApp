@@ -5,6 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="DAL\Repositories\Interfaces\IBuildingRepository.cs" />
+    <Compile Remove="DAL\Repositories\Interfaces\ILocationRepository.cs" />
+    <Compile Remove="DAL\Repositories\Interfaces\IProductRepository.cs" />
+    <Compile Remove="DAL\Repositories\Interfaces\IRoomRepository.cs" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
@@ -22,6 +29,13 @@
 
 	<ItemGroup>
 	  <Folder Include="Migrations\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="DAL\Repositories\Interfaces\ILocationRepository.cs" />
+	  <None Include="DAL\Repositories\Interfaces\IProductRepository.cs" />
+	  <None Include="DAL\Repositories\Interfaces\IRoomRepository.cs" />
+	  <None Include="DAL\Repositories\Interfaces\IBuildingRepository.cs" />
 	</ItemGroup>
 
 
