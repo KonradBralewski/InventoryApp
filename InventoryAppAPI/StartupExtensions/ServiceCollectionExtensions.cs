@@ -6,6 +6,7 @@ using InventoryAppAPI.DAL;
 using InventoryAppAPI.DAL.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -15,13 +16,20 @@ namespace InventoryAppAPI.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        private static readonly IConfiguration _config;
+
         public static string policyName = "_myAllowSpecificOrigins";
         public static void ConfigureCors(this IServiceCollection services)
         {
 
         }
 
+        public static void SetupDatabaseProvider(this IServiceCollection services, IConfiguration _config)
+        {
+            // Add db context
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(
+                    _config.GetConnectionString("AppDbContext") ?? throw new InvalidOperationException("Connection string 'AppDbContext' not found.")));
+        }
         public static void AddSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -60,6 +68,8 @@ namespace InventoryAppAPI.Extensions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ITokenManager, TokenManager>();
+
+            services.AddScoped<Seeder>();
         }
 
         public static void AddAuth(this IServiceCollection services, ConfigurationManager cfg)

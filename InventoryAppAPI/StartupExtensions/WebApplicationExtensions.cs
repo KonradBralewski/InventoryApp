@@ -1,7 +1,17 @@
-﻿namespace InventoryAppAPI.Extensions
+﻿using InventoryAppAPI.DAL;
+
+namespace InventoryAppAPI.Extensions
 {
     public static class WebApplicationExtensions
     {
+        public static void SeedDatabase(this WebApplication app)
+        {
+            var scope = app.Services.CreateScope();
+            var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
+
+            seeder.Seed();
+
+        }
         public static void Configure(this WebApplication app) 
         {
             // Configure the HTTP request pipeline.

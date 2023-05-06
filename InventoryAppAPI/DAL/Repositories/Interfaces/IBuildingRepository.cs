@@ -1,6 +1,9 @@
-﻿namespace InventoryAppAPI.DAL.Repositories.Interfaces
+﻿using InventoryAppAPI.DAL.Entities.Dicts;
+using InventoryAppAPI.DAL.Repositories.Base;
+
+namespace InventoryAppAPI.DAL.Repositories.Interfaces
 {
-    public interface IRoomRepository 
+    public interface IBuildingRepository : IRepository<Building>
     {
     }
 }

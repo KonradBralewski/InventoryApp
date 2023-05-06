@@ -1,5 +1,4 @@
-﻿using InventoryAppAPI.DAL.Entities;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace InventoryAppAPI.DAL.Repositories.Base
 {

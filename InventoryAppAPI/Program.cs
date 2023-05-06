@@ -10,12 +10,10 @@ namespace InventoryAppAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.SetupDatabaseProvider(builder.Configuration);
+
             builder.Services.AddAuth(builder.Configuration);
             builder.Services.AddControllers();
-
-            // Add db context
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("AppDbContext") ?? throw new InvalidOperationException("Connection string 'AppDbContext' not found.")));
 
             builder.Services.AddIdentity();
 
@@ -28,6 +26,8 @@ namespace InventoryAppAPI
             var app = builder.Build();
 
             app.Configure();
+
+            app.SeedDatabase();
 
             app.Run();
         }
