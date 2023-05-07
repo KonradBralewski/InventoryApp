@@ -1,4 +1,5 @@
 ﻿using InventoryAppAPI.DAL.Entities;
+using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.Models.Authentication;
 using Microsoft.AspNetCore.Identity;
 
@@ -50,6 +51,53 @@ namespace InventoryAppAPI.DAL
 
                     await _userManager.AddToRoleAsync(admin, UserRoles.Admin);
                 }
+
+                if (!_context.Buildings.Any())
+                {
+                    Building building = new Building
+                    {
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = "Admin",
+                        ModifiedAt = DateTime.UtcNow,
+                        ModifiedBy = "Admin",
+                        Name = "Bulding 1",
+                    };
+
+                    _context.Buildings.Add(building);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                if(!_context.Locations.Any())
+                {
+                    Room room = new Room
+                    {
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = "Admin",
+                        ModifiedAt = DateTime.UtcNow,
+                        ModifiedBy = "Admin",
+                        Name = "Room 1"
+                    };
+
+                    _context.Add(room);
+
+                    await _context.SaveChangesAsync();
+
+                    Location location = new Location
+                    {
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = "Admin",
+                        ModifiedAt = DateTime.UtcNow,
+                        ModifiedBy = "Admin",
+                        BuildingId = 1,
+                        RoomId = 1
+                    };
+
+                    _context.Add(location);
+
+                    await _context.SaveChangesAsync();
+                }
+                
             }
         }
     }

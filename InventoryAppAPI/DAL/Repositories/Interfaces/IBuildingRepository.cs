@@ -5,5 +5,6 @@ namespace InventoryAppAPI.DAL.Repositories.Interfaces
 {
     public interface IBuildingRepository : IRepository<Building>
     {
+        public Task<IEnumerable<Building>> GetAllBuildingsAsync();
     }
 }

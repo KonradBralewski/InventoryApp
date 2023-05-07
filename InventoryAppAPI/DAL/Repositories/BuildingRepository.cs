@@ -17,6 +17,11 @@ namespace InventoryAppAPI.DAL.Repositories
         {
             _dbContext = dbContext;
         }
+        
+        public async Task<IEnumerable<Building>> GetAllBuildingsAsync()
+        {
+            return await _dbContext.Buildings.ToListAsync();
+        }
         public async Task<Building> GetByIdAsync(int id)
         {
             return await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == id);
@@ -36,7 +41,7 @@ namespace InventoryAppAPI.DAL.Repositories
 
             return dto;
         }
-        public Task<Building> UpdateAsync(Building dto)
+        public Task<Building> UpdateAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -58,5 +63,6 @@ namespace InventoryAppAPI.DAL.Repositories
 
             return true;
         }
+
     }
 }

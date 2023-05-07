@@ -3,6 +3,7 @@ using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Base;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Exceptions;
+using InventoryAppAPI.Models.Responses;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,6 +17,25 @@ namespace InventoryAppAPI.DAL.Repositories
         public LocationRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
+        }
+
+        public async Task<IEnumerable<LocationDTO>> GetAllLocationsByBuildingIdAsync(int buildingId)
+        {
+            IQueryable<LocationDTO> locations = from location in _dbContext.Locations where buildingId == location.BuildingId
+                                             join room in _dbContext.Rooms on location.RoomId equals room.Id
+                                             select new LocationDTO
+                                             {
+                                                 Id = location.Id,
+                                                 RoomId = location.RoomId,
+                                                 Room = room,
+                                                 CreatedAt = location.CreatedAt,
+                                                 CreatedBy = location.CreatedBy,
+                                                 ModifiedAt = location.ModifiedAt,
+                                                 ModifiedBy = location.ModifiedBy
+                                             };
+    
+
+            return await locations.ToListAsync();
         }
         public async Task<Location> GetByIdAsync(int id)
         {
@@ -36,7 +56,7 @@ namespace InventoryAppAPI.DAL.Repositories
 
             return dto;
         }
-        public Task<Location> UpdateAsync(Location dto)
+        public Task<Location> UpdateAsync(int id)
         {
             throw new NotImplementedException();
         }

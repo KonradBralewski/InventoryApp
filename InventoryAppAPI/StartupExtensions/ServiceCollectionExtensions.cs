@@ -4,6 +4,8 @@ using InventoryAppAPI.BLL.Services.Email;
 using InventoryAppAPI.BLL.Token;
 using InventoryAppAPI.DAL;
 using InventoryAppAPI.DAL.Entities;
+using InventoryAppAPI.DAL.Repositories;
+using InventoryAppAPI.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -32,35 +34,34 @@ namespace InventoryAppAPI.Extensions
         }
         public static void AddSwagger(this IServiceCollection services)
         {
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "InventoryAppAPI", Version = "v1" });
-
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Type = SecuritySchemeType.Http,
+                    Title = "JWTToken_Auth_API",
+                    Version = "v1"
+                });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Scheme = "bearer",
-                    Description = "Please insert JWT token into field"
+                    Description = "JWT Authorization header using the Bearer scheme. " +
+                    "\r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: " +
+                    "\"Bearer 1safsfsdfdfd\"",
                 });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
                 {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
+                    new OpenApiSecurityScheme {
+                        Reference = new OpenApiReference {
+                            Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
-                            }
-                        },
-                        new string[] { }
-                    }
+                        }
+                    },
+                    new string[] {}
+                }
                 });
-
-
             });
         }   
         public static void AddServices(this IServiceCollection services) 
@@ -68,6 +69,11 @@ namespace InventoryAppAPI.Extensions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ITokenManager, TokenManager>();
+
+            services.AddScoped<IBuildingRepository, BuildingRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddScoped<Seeder>();
         }

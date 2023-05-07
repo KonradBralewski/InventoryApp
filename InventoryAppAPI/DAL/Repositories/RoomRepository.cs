@@ -36,7 +36,7 @@ namespace InventoryAppAPI.DAL.Repositories
 
             return dto;
         }
-        public Task<Room> UpdateAsync(Room dto)
+        public Task<Room> UpdateAsync(int id)
         {
             throw new NotImplementedException();
         }
