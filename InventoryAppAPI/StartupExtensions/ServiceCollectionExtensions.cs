@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -76,6 +77,7 @@ namespace InventoryAppAPI.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddScoped<Seeder>();
+            services.AddHttpContextAccessor();
         }
 
         public static void AddAuth(this IServiceCollection services, ConfigurationManager cfg)
@@ -93,8 +95,8 @@ namespace InventoryAppAPI.Extensions
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ClockSkew = TimeSpan.Zero,

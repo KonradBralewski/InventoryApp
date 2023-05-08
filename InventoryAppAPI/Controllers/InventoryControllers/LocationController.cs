@@ -1,5 +1,7 @@
 ﻿using InventoryAppAPI.DAL.Entities.Dicts;
+using InventoryAppAPI.DAL.Repositories;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
+using InventoryAppAPI.Models.Requests.Add;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,7 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin, User")]
+    //[Authorize(Roles = "Admin, User")]
     public class LocationsController : ControllerBase
     {
         private readonly ILocationRepository _locationRepository;
@@ -19,9 +21,25 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
         }
 
         [HttpGet("building/{buildingId}")]
-        public async Task<IActionResult> GetAllLocationsByBuildingIdAsync([FromRoute] int buildingId)
+        public async Task<IActionResult> GetLocationsByBuildingIdAsync([FromRoute] int buildingId)
         {
             return Ok(await _locationRepository.GetAllLocationsByBuildingIdAsync(buildingId));
         }
+
+        [HttpPost]
+
+        public async Task<IActionResult> AddLocationAsync(AddLocationRequest request)
+        {
+            Location addedLocation = await _locationRepository.AddLocationAsync(request);
+
+            return Created($"api/locations/{addedLocation.Id}", addedLocation);
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> UpdateLocationAsync([FromBody] UpdateLocationRequest request)
+        {
+            return Ok(await _locationRepository.UpdateLocationAsync(request));
+        }
+
     }
 }

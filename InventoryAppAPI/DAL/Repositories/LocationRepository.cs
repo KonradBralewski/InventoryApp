@@ -3,6 +3,7 @@ using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Base;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Exceptions;
+using InventoryAppAPI.Models.Requests.Add;
 using InventoryAppAPI.Models.Responses;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -13,10 +14,14 @@ namespace InventoryAppAPI.DAL.Repositories
     public class LocationRepository : ILocationRepository
     {
         private readonly AppDbContext _dbContext;
+        private readonly IBuildingRepository _buildingRepository;
+        private readonly IRoomRepository _roomRepository;
 
-        public LocationRepository(AppDbContext dbContext)
+        public LocationRepository(AppDbContext dbContext, IRoomRepository roomRepository = null, IBuildingRepository buildingRepository = null)
         {
             _dbContext = dbContext;
+            _roomRepository = roomRepository;
+            _buildingRepository = buildingRepository;
         }
 
         public async Task<IEnumerable<LocationDTO>> GetAllLocationsByBuildingIdAsync(int buildingId)
@@ -49,16 +54,55 @@ namespace InventoryAppAPI.DAL.Repositories
             return await locations.ToListAsync();
         }
 
-        public async Task<Location> AddAsync(Location dto)
+        public async Task<Location> AddLocationAsync(AddLocationRequest request)
         {
-            _dbContext.Locations.Add(dto);
+            if(await _buildingRepository.GetByIdAsync(request.BuildingId) == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given building id could not be assosciated with any building.");
+            }
+
+            if (await _roomRepository.GetByIdAsync(request.RoomId) == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given room id could not be assosciated with any room.");
+            }
+
+            Location location = new Location { RoomId = request.RoomId, BuildingId = request.BuildingId};
+
+            _dbContext.Locations.Add(location);
             await _dbContext.SaveChangesAsync();
 
-            return dto;
+            return location;
         }
-        public Task<Location> UpdateAsync(int id)
+        public async Task<Location> UpdateLocationAsync(UpdateLocationRequest request)
         {
-            throw new NotImplementedException();
+            if (await _buildingRepository.GetByIdAsync(request.BuildingId) == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given building id could not be assosciated with any building.");
+            }
+
+            if (await _roomRepository.GetByIdAsync(request.RoomId) == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given room id could not be assosciated with any room.");
+            }
+
+            Location location = await GetByIdAsync(request.Id);
+
+            if (location == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given location id could not be assosciated with any location.");
+            }
+
+            if (request.RoomId == location.RoomId && request.BuildingId == location.BuildingId)
+            {
+                throw new RequestException(StatusCodes.Status204NoContent, "Change request is the same as the resource. No changes were made.");
+            }
+
+            location.BuildingId = request.BuildingId;
+            location.RoomId = request.RoomId;
+
+            await _dbContext.SaveChangesAsync();
+
+            return location;
         }
 
         public async Task<bool> DeleteAsync(int id)
