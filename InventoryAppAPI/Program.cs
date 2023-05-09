@@ -10,10 +10,11 @@ namespace InventoryAppAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.SetupDatabaseProvider(builder.Configuration);
-
             builder.Services.AddAuth(builder.Configuration);
+
             builder.Services.AddControllers();
+
+            builder.Services.SetupDatabaseProvider(builder.Configuration);
 
             builder.Services.AddIdentity();
 

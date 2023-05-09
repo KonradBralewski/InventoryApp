@@ -42,8 +42,8 @@ namespace InventoryAppAPI.BLL.Token
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
-                notBefore: DateTime.Now,
-                expires: DateTime.Now.AddMinutes(tokenValidityInMinutes),
+                notBefore: DateTime.UtcNow,
+                expires: DateTime.UtcNow.AddMinutes(tokenValidityInMinutes),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
@@ -55,7 +55,7 @@ namespace InventoryAppAPI.BLL.Token
             return new TokenModel {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 RefreshToken = refreshToken,
-                RefreshTokenExpiryTime = DateTime.Now.AddDays(refreshTokenValidityInDays)
+                RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(refreshTokenValidityInDays)
             };
         }
 
@@ -101,7 +101,7 @@ namespace InventoryAppAPI.BLL.Token
 
             var user = await _userManager.FindByEmailAsync(email);
 
-            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 throw new RequestException(StatusCodes.Status401Unauthorized, "Invalid access token or refresh token.");
             }
