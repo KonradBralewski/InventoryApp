@@ -35,10 +35,10 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
             return Created($"api/locations/{addedLocation.Id}", addedLocation);
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> UpdateLocationAsync([FromBody] UpdateLocationRequest request)
+        [HttpPatch("{locationId}")]
+        public async Task<IActionResult> UpdateLocationAsync([FromRoute]int locationId,[FromBody] UpdateLocationRequest request)
         {
-            return Ok(await _locationRepository.UpdateLocationAsync(request));
+            return Ok(await _locationRepository.UpdateLocationAsync(locationId, request));
         }
 
     }

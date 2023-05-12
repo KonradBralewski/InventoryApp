@@ -34,10 +34,10 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
             return Created($"api/buildings/{addedBuilding.Id}", addedBuilding);
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> UpdateBuildingAsync([FromBody] UpdateBuildingRequest request)
+        [HttpPatch("{buildingId}")]
+        public async Task<IActionResult> UpdateBuildingAsync([FromRoute] int buildingId, [FromBody] UpdateBuildingRequest request)
         {
-            return Ok(await _buildingRepository.UpdateBuildingAsync(request));
+            return Ok(await _buildingRepository.UpdateBuildingAsync(buildingId, request));
         }
     }
 }

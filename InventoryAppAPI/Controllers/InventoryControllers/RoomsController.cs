@@ -42,10 +42,10 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
             return Created($"api/rooms/{room.Id}", room);
         }
 
-        [HttpPatch]
-        public async Task<IActionResult> UpdateRoomAsync([FromBody] UpdateRoomRequest request)
+        [HttpPatch("{roomId}")]
+        public async Task<IActionResult> UpdateRoomAsync([FromRoute]int roomId, [FromBody] UpdateRoomRequest request)
         {
-            return Ok(await _roomRepository.UpdateRoomAsync(request));
+            return Ok(await _roomRepository.UpdateRoomAsync(roomId, request));
         }
 
     }

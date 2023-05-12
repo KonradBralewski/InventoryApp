@@ -47,7 +47,7 @@ namespace InventoryAppAPI.DAL
 
                     admin.EmailConfirmed = true;
 
-                    await _userManager.CreateAsync(admin, "sggw_password");
+                    await _userManager.CreateAsync(admin, "Sggw@sggw_PASSWORD1");
 
                     await _userManager.AddToRoleAsync(admin, UserRoles.Admin);
                 }

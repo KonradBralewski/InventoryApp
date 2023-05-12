@@ -63,9 +63,9 @@ namespace InventoryAppAPI.DAL.Repositories
             return room;
         }
 
-        public async Task<Room> UpdateRoomAsync(UpdateRoomRequest request)
+        public async Task<Room> UpdateRoomAsync(int roomId, UpdateRoomRequest request)
         {
-            Room room = await GetByIdAsync(request.Id);
+            Room room = await GetByIdAsync(roomId);
 
             if (room == null)
             {

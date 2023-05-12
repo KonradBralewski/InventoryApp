@@ -73,8 +73,15 @@ namespace InventoryAppAPI.DAL.Repositories
 
             return location;
         }
-        public async Task<Location> UpdateLocationAsync(UpdateLocationRequest request)
+        public async Task<Location> UpdateLocationAsync(int locationId, UpdateLocationRequest request)
         {
+            Location location = await GetByIdAsync(locationId);
+
+            if (location == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given location id could not be assosciated with any location.");
+            }
+
             if (await _buildingRepository.GetByIdAsync(request.BuildingId) == null)
             {
                 throw new RequestException(StatusCodes.Status404NotFound, "Given building id could not be assosciated with any building.");
@@ -83,13 +90,6 @@ namespace InventoryAppAPI.DAL.Repositories
             if (await _roomRepository.GetByIdAsync(request.RoomId) == null)
             {
                 throw new RequestException(StatusCodes.Status404NotFound, "Given room id could not be assosciated with any room.");
-            }
-
-            Location location = await GetByIdAsync(request.Id);
-
-            if (location == null)
-            {
-                throw new RequestException(StatusCodes.Status404NotFound, "Given location id could not be assosciated with any location.");
             }
 
             if (request.RoomId == location.RoomId && request.BuildingId == location.BuildingId)

@@ -44,9 +44,9 @@ namespace InventoryAppAPI.DAL.Repositories
 
             return building;
         }
-        public async Task<Building> UpdateBuildingAsync(UpdateBuildingRequest request)
+        public async Task<Building> UpdateBuildingAsync(int buildingId, UpdateBuildingRequest request)
         {
-            Building building = await GetByIdAsync(request.Id);
+            Building building = await GetByIdAsync(buildingId);
 
             if(building == null) 
             {

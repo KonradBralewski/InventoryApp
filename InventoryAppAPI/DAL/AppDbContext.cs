@@ -42,6 +42,8 @@ namespace InventoryAppAPI.DAL
 
         private void AutoCreatedOrModifiedProperites()
         {
+            if(_httpContextAccessor.HttpContext == null) { return; }
+
             var entities = ChangeTracker.Entries().Where(
                 x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
 

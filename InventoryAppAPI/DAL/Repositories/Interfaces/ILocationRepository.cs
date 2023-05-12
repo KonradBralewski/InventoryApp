@@ -9,6 +9,6 @@ namespace InventoryAppAPI.DAL.Repositories.Interfaces
     {
         Task<IEnumerable<LocationDTO>> GetAllLocationsByBuildingIdAsync(int buildingId);
         Task<Location> AddLocationAsync(AddLocationRequest request);
-        Task<Location> UpdateLocationAsync(UpdateLocationRequest request);
+        Task<Location> UpdateLocationAsync(int locationId, UpdateLocationRequest request);
     }
 }

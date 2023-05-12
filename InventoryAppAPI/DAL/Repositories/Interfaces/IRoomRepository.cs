@@ -9,6 +9,6 @@ namespace InventoryAppAPI.DAL.Repositories.Interfaces
     {
         Task<IEnumerable<Room>> GetListByBuildingIdAsync(int buildingId, Expression<Func<Room, bool>> predicate = default(Expression<Func<Room, bool>>));
         Task<Room> AddRoomAsync(AddRoomRequest request);
-        Task<Room> UpdateRoomAsync(UpdateRoomRequest request);
+        Task<Room> UpdateRoomAsync(int roomId, UpdateRoomRequest request);
     }
 }
