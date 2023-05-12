@@ -28,8 +28,6 @@ namespace InventoryAppAPI
 
             app.Configure();
 
-            app.SeedDatabase();
-
             app.Run();
         }
     }

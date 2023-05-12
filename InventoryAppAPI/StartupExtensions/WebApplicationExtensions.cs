@@ -1,4 +1,6 @@
 ﻿using InventoryAppAPI.DAL;
+using System.Net.Sockets;
+using System.Net;
 
 namespace InventoryAppAPI.Extensions
 {
@@ -21,9 +23,11 @@ namespace InventoryAppAPI.Extensions
                 app.UseCors(ServiceCollectionExtensions.policyName);
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                app.SeedDatabase();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             
             app.UseAuthentication();
 
