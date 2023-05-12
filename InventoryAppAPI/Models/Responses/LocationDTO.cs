@@ -6,6 +6,7 @@ namespace InventoryAppAPI.Models.Responses
     {
         public int Id { get; set; }
         public int RoomId { get; set; }
+        public int BuildingId { get; set; }
         public Room Room { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }

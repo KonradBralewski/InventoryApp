@@ -33,6 +33,7 @@ namespace InventoryAppAPI.DAL.Repositories
                                                  Id = location.Id,
                                                  RoomId = location.RoomId,
                                                  Room = room,
+                                                 BuildingId = location.BuildingId,
                                                  CreatedAt = location.CreatedAt,
                                                  CreatedBy = location.CreatedBy,
                                                  ModifiedAt = location.ModifiedAt,
