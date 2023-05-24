@@ -3,6 +3,7 @@ using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Base;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Exceptions;
+using InventoryAppAPI.Models.Requests.Add;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
@@ -34,16 +35,34 @@ namespace InventoryAppAPI.DAL.Repositories
             return await buildings.ToListAsync();
         }
 
-        public async Task<Building> AddAsync(Building dto)
+        public async Task<Building> AddBuildingAsync(AddBuildingRequest request)
         {
-            _dbContext.Buildings.Add(dto);
+            Building building = new Building { Name = request.Name };
+
+            _dbContext.Buildings.Add(building);
             await _dbContext.SaveChangesAsync();
 
-            return dto;
+            return building;
         }
-        public Task<Building> UpdateAsync(int id)
+        public async Task<Building> UpdateBuildingAsync(int buildingId, UpdateBuildingRequest request)
         {
-            throw new NotImplementedException();
+            Building building = await GetByIdAsync(buildingId);
+
+            if(building == null) 
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given id could not be assosciated with any building.");
+            }
+
+            if(request.Name == building.Name)
+            {
+                throw new RequestException(StatusCodes.Status204NoContent, "Change request is the same as the resource. No changes were made.");
+            }
+
+            building.Name = request.Name;
+
+            await _dbContext.SaveChangesAsync();
+
+            return building;
         }
 
         public async Task<bool> DeleteAsync(int id)
