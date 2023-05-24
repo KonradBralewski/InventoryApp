@@ -6,9 +6,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 //Screens
-import HomeScreen from './screens/screen-main/HomeScreen';
-import RaportScreen from './screens/screen-main/RaportScreen';
-import InventoryItems from './screens/screen-main/InventoryScreen';
+import HomeScreen from './screens/HomeScreen/HomeScreen';
+import RaportScreen from './screens/RaportScreen/RaportScreen';
+import MainInventoryScreen from "./screens/MainInventoryScreen/MainInventoryScreen";
+import InventoryItems from './screens/ItemsScreen/ItemsScreen';
 
 
 //Screens names
@@ -41,7 +42,7 @@ export default function MainContainter({navigation}){
                     })}
                 >
                 <Tab.Screen name={homeName} component={HomeScreen}/>    
-                <Tab.Screen name={inventoryName} component={InventoryItems}/>    
+                <Tab.Screen name={inventoryName} component={MainInventoryScreen}/>    
                 <Tab.Screen name={raportName} component={RaportScreen}/>    
 
             </Tab.Navigator>
