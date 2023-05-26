@@ -1,64 +1,67 @@
-import * as React from 'react';
-import { SafeAreaView, FlatList, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import List from "../../components/List";
+import screens from '../../constants/screens';
+import { View, TouchableOpacity, Text} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-//styles
-import styles from '../../styles/_styles-InventoryRooms';
+// styles
+import styles from "./_styles-ItemsScreen"
 
-const buildings = [
+let items = [
   {
     id: '1',
-    name: 'Biurko 1',
+    name: 'Przedmiot 1'
   },
   {
     id: '2',
-    name: 'Klawiatura 1',
+    name: 'Przedmiot 2',
   },
   {
     id: '3',
-    name: 'Biurko 2',
+    name: 'Przedmiot 3',
+  },
+  {
+    id: '4',
+    name: 'Przedmiot 4',
+  },
+  {
+    id: '5',
+    name: 'Przedmiot 5',
+  },
+  {
+    id: '6',
+    name: 'Przedmiot 6',
+  },
+  {
+    id: '7',
+    name: 'Przedmiot 7',
+  },
+  {
+    id: '8',
+    name: 'Przedmiot 8',
   },
 ];
 
-export default function InventoryItem() {
-  const navigation = useNavigation();
-  const myListEmpty = () => {
-    return (
-      <View style={{ alignItems: "center" }}>
-        <Text style={styles.item}>Brak sal</Text>
+export default function ItemsScreen(){
+  const navigate = useNavigation();
+  const homeTabConstants = screens.HomeTab;
+
+  return(
+    <SafeAreaView style={styles.safeAreaContainer}>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity style={styles.scanButtonContainer}>
+          <Ionicons name="scan-circle-sharp" size={60} color="black" style={styles.scanButtonIcon}/>
+          <Text style={styles.underButtonText}>Skanuj</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.generateButtonContainer}>
+          <Ionicons name="document-sharp" size={60} color="black" style={styles.generateButtonIcon}/>
+          <Text style={styles.underButtonText}>Generuj</Text>
+        </TouchableOpacity>
       </View>
-    );
-  };
-
-const renderBuildingItem = ({ item }) => {
-  const handleItemPress = () => {
-    navigation.navigate('RaportScreen', { buildingId: item.id });
-  };
-
-  return (
-    <TouchableOpacity onPress={handleItemPress}>
-      <View style={styles.buildingContainer}>
-        <Text style={styles.item}>{item.name}</Text>
-        <Ionicons name="chevron-forward-outline" size={24} color="black" style={styles.chevronIcon} />
+      <View style={styles.container}>
+        <List data={items} emptyListMessage="Brak przedmiotów" iconless ={true}/>
       </View>
-    </TouchableOpacity>
-  );
-};
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={buildings}
-        renderItem={renderBuildingItem}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={myListEmpty}
-        ListHeaderComponent={() => (
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Przedmioty</Text>
-          </View>
-        )}
-      />
     </SafeAreaView>
-  );
+  )
 }

@@ -5,12 +5,12 @@ const styles = StyleSheet.create({
       padding: 5,
       flex: 1,
     },
-    item: {
+    itemText: {
       padding: 20,
       fontSize: 20,
       marginTop: 5,
     },
-    headerContainer: {
+    listHeaderContainer: {
       backgroundColor: "#1470d9",
       borderRadius: 10,
       padding: 10,
@@ -19,12 +19,12 @@ const styles = StyleSheet.create({
       marginTop: 0,
       marginBottom: 40,
     },
-    headerText: {
+    listHeaderText: {
       fontSize: 30,
       color: "white",
       fontWeight: "bold",
     },
-    buildingContainer: {
+    itemContainer: {
       backgroundColor: "#D3D3D3",
       borderRadius: 10,
       marginHorizontal: 10,

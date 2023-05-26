@@ -1,64 +1,50 @@
-import * as React from 'react';
-import { SafeAreaView, FlatList, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import List from "../../components/List";
+import screens from '../../constants/screens';
 
-//styles
-import styles from '../../styles/_styles-InventoryRooms';
-
-const buildings = [
+let rooms = [
   {
     id: '1',
-    name: 'Sala 1',
+    name: 'Pomieszczenie 1'
   },
   {
     id: '2',
-    name: 'Sala 2',
+    name: 'Pomieszczenie 2',
   },
   {
     id: '3',
-    name: 'Sala 3',
+    name: 'Pomieszczenie 3',
+  },
+  {
+    id: '4',
+    name: 'Pomieszczenie 4',
+  },
+  {
+    id: '5',
+    name: 'Pomieszczenie 5',
+  },
+  {
+    id: '6',
+    name: 'Pomieszczenie 6',
+  },
+  {
+    id: '7',
+    name: 'Pomieszczenie 7',
+  },
+  {
+    id: '8',
+    name: 'Pomieszczenie 8',
   },
 ];
 
-export default function InventoryRooms() {
-  const navigation = useNavigation();
-  const myListEmpty = () => {
-    return (
-      <View style={{ alignItems: "center" }}>
-        <Text style={styles.item}>Brak sal</Text>
-      </View>
-    );
-  };
+export default function BuildingsScreen(){
+  const navigate = useNavigation();
+  const homeTabConstants = screens.HomeTab;
 
-const renderBuildingItem = ({ item }) => {
-  const handleItemPress = () => {
-    navigation.navigate('RaportScreen', { buildingId: item.id });
-  };
+  rooms = rooms.map(room => ({...room, 
+    onItemPress: () => navigate.navigate(homeTabConstants.ItemsScreen.screenName, {roomsId: room.id})}))
 
-  return (
-    <TouchableOpacity onPress={handleItemPress}>
-      <View style={styles.buildingContainer}>
-        <Text style={styles.item}>{item.name}</Text>
-        <Ionicons name="chevron-forward-outline" size={24} color="black" style={styles.chevronIcon} />
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={buildings}
-        renderItem={renderBuildingItem}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={myListEmpty}
-        ListHeaderComponent={() => (
-          <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Wybierz salę</Text>
-          </View>
-        )}
-      />
-    </SafeAreaView>
-  );
+  return(
+    <List data={rooms} headerTitle = "Wybierz Pomieszczenie" emptyListMessage="Brak Pomieszczeń" iconName={"chevron-forward-outline"}/>
+  )
 }
