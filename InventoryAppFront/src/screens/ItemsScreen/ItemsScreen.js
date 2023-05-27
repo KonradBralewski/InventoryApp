@@ -3,7 +3,7 @@ import List from "../../components/List";
 import screens from '../../constants/screens';
 import { View, TouchableOpacity, Text} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import InventoryProcess from './Components/InventoryProcess';
 
 // styles
 import styles from "./_styles-ItemsScreen"
@@ -11,11 +11,11 @@ import styles from "./_styles-ItemsScreen"
 let items = [
   {
     id: '1',
-    name: 'Przedmiot 1'
+    name: 'Klawiatura 1'
   },
   {
     id: '2',
-    name: 'Przedmiot 2',
+    name: 'Biurko 1',
   },
   {
     id: '3',
@@ -49,16 +49,7 @@ export default function ItemsScreen(){
 
   return(
     <SafeAreaView style={styles.safeAreaContainer}>
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={styles.scanButtonContainer}>
-          <Ionicons name="scan-circle-sharp" size={60} color="black" style={styles.scanButtonIcon}/>
-          <Text style={styles.underButtonText}>Skanuj</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.generateButtonContainer}>
-          <Ionicons name="document-sharp" size={60} color="black" style={styles.generateButtonIcon}/>
-          <Text style={styles.underButtonText}>Generuj</Text>
-        </TouchableOpacity>
-      </View>
+      <InventoryProcess/>
       <View style={styles.container}>
         <List data={items} emptyListMessage="Brak przedmiotów" iconless ={true}/>
       </View>
