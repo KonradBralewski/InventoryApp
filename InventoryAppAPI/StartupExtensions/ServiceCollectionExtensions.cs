@@ -71,6 +71,7 @@ namespace InventoryAppAPI.Extensions
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ITokenManager, TokenManager>();
 
+            services.AddScoped<IStockItemRepository, StockItemRepository>();
             services.AddScoped<IBuildingRepository, BuildingRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IRoomRepository, RoomRepository>();

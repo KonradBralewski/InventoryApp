@@ -2,9 +2,9 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container : {
-        backgroundColor : 'red',
         flex : 1,
-        flexDirection : 'row'
+        flexDirection : 'row',
+        position : 'absolute'
     },
     scannedCodeInfo : {
         fontSize : 25,

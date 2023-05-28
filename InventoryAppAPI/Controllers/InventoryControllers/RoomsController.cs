@@ -10,7 +10,7 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin, User")]
+    //[Authorize(Roles = "Admin, User")]
     public class RoomsController : ControllerBase
     {
         private readonly IRoomRepository _roomRepository;

@@ -1,47 +1,28 @@
 import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
 import List from "../../components/List";
 import screens from '../../constants/screens';
+import { useAxiosRequest } from '../../hooks/UseAxiosRequest';
+import ErrorScreen from '../ErrorScreen/ErrorScreen';
+import { MemoizedLoadingScreen } from '../LoadingScreen/LoadingScreen';
 
-let buildings = [
-  {
-    id: '1',
-    name: 'Budynek 1'
-  },
-  {
-    id: '2',
-    name: 'Budynek 2',
-  },
-  {
-    id: '3',
-    name: 'Budynek 3',
-  },
-  {
-    id: '4',
-    name: 'Budynek 4',
-  },
-  {
-    id: '5',
-    name: 'Budynek 5',
-  },
-  {
-    id: '6',
-    name: 'Budynek 6',
-  },
-  {
-    id: '7',
-    name: 'Budynek 7',
-  },
-  {
-    id: '8',
-    name: 'Budynek 8',
-  },
-];
 
 export default function BuildingsScreen(){
   const navigate = useNavigation();
   const homeTabConstants = screens.HomeTab;
 
-  buildings = buildings.map(building => ({...building, 
+  const[data, error, isLoading, resetHook] = useAxiosRequest("buildings", "get")
+
+  if(isLoading || (!data && !error)){
+    return <MemoizedLoadingScreen/>
+  }
+
+  if(!data && error){
+    return <ErrorScreen errorTitle ="Błąd Aplikacji"
+     errorDescription="InventoryApp nie był w stanie otrzymać listy budynków." reseter={()=>{resetHook()}}/>
+  }
+
+  const buildings = data.map(building => ({...building, 
     onItemPress: () => navigate.navigate(homeTabConstants.RoomsScreen.screenName, {buildingId: building.id})}))
 
   return(

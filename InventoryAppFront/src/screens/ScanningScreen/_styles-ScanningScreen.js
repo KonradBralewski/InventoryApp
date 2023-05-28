@@ -2,12 +2,10 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container : {
-        flex : 1,
-        backgroundColor : 'black'
+        flex : 1
     },
     cameraContainer : {
-        position : 'absolute',
-        bottom : -20
+        flex : 1
     }
 });
   

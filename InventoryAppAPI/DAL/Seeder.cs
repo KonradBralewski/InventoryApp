@@ -97,6 +97,40 @@ namespace InventoryAppAPI.DAL
 
                     await _context.SaveChangesAsync();
                 }
+
+                if(!_context.Products.Any())
+                {
+                    Product product = new Product
+                    {
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedBy = "Admin",
+                        ModifiedAt = DateTime.UtcNow,
+                        ModifiedBy = "Admin",
+                        Name = "Myszka"
+
+                    };
+
+                    _context.Add(product);
+
+                    await _context.SaveChangesAsync();
+                }
+
+                //if(!_context.StockItems.Any())
+                //{
+                //    StockItems stockItem = new StockItems
+                //    {
+                //        Code = "123456789",
+                //        LocationId = 1,
+                //        ProductId = 1,
+                //        IsArchive = false,
+                //        InventoriedAt = DateTime.UtcNow,
+                //        InventoriedBy = "Admin"
+                //    };
+
+                //    _context.Add(stockItem);
+
+                //    await _context.SaveChangesAsync();
+                //}
                 
             }
         }
