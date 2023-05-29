@@ -7,10 +7,14 @@ namespace InventoryAppAPI.Models.Responses
         public int Id { get; set; }
         public int RoomId { get; set; }
         public int BuildingId { get; set; }
-        public Room Room { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string ModifiedBy { get; set; }
-        public DateTime? ModifiedAt { get; set; }
+        public RoomDTO Room { get; set; }
+
+        public LocationDTO(Location location)
+        {
+            Id = location.Id;
+            RoomId = location.RoomId;
+            BuildingId = location.BuildingId;
+            Room = new RoomDTO(location.Room);
+        }
     }
 }

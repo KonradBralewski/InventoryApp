@@ -3,7 +3,10 @@ using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Exceptions;
 using InventoryAppAPI.Models.Requests.Add;
+using InventoryAppAPI.Models.Requests.Update;
+using InventoryAppAPI.Models.Responses;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Linq.Expressions;
 
 namespace InventoryAppAPI.DAL.Repositories
@@ -11,26 +14,37 @@ namespace InventoryAppAPI.DAL.Repositories
     public class StockItemRepository : IStockItemRepository
     {
         private readonly AppDbContext _dbContext;
+        private readonly IProductRepository _productRepository;
+        private readonly ILocationRepository _locationRepository;
 
-        public StockItemRepository(AppDbContext dbContext)
+        public StockItemRepository(AppDbContext dbContext, ILocationRepository locationRepository, IProductRepository productRepository)
         {
             _dbContext = dbContext;
+            _locationRepository = locationRepository;
+            _productRepository = productRepository;
         }
-        public async Task<StockItems> GetByIdAsync(int id)
+        public async Task<StockItemDTO> GetByIdAsync(int id)
         {
-            return await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == id);
+            StockItems found = await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == id);
+
+            if(found == null)
+            {
+                return null;
+            }
+
+            return new StockItemDTO(found);
         }
 
-        public async Task<IEnumerable<StockItems>> GetListAsync(Expression<Func<StockItems, bool>> predicate)
+        public async Task<IEnumerable<StockItemDTO>> GetListAsync(Expression<Func<StockItems, bool>> predicate)
         {
-            IQueryable<StockItems> stockItems = _dbContext.StockItems.Where(predicate);
+            IQueryable<StockItems> query = _dbContext.StockItems.Where(predicate);
+            IEnumerable<StockItemDTO> stockItems = (await query.ToListAsync()).Select(si => new StockItemDTO(si));
 
-            return await stockItems.ToListAsync();
+            return stockItems;
         }
 
-        public async Task<StockItems> AddAsync(AddStockItemRequest request)
+        public async Task<StockItemDTO> AddStockItemAsync(AddStockItemRequest request)
         {
-
             StockItems stockItem = new StockItems
             {
                 Code = request.Code,
@@ -43,11 +57,40 @@ namespace InventoryAppAPI.DAL.Repositories
 
             await _dbContext.SaveChangesAsync();
 
-            return stockItem;
+            return new StockItemDTO(stockItem);
         }
-        public Task<StockItems> UpdateAsync(int id)
+        public async Task<StockItemDTO> UpdateAsync(int stockItemId, UpdateStockItemRequest request)
         {
-            throw new NotImplementedException();
+            StockItems stockItem = await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == stockItemId);
+
+            if (stockItem == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given stockItemId could not be assosciated with any location.");
+            }
+
+            if (await _locationRepository.GetByIdAsync(request.LocationId) == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given location id could not be assosciated with any location.");
+            }
+
+            if (await _productRepository.GetByIdAsync(request.ProductId) == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given product id could not be assosciated with any product.");
+            }
+
+            if (request.ProductId == stockItem.ProductId
+                && request.LocationId == stockItem.ProductId
+                && request.Code == stockItem.Code)
+            {
+                throw new RequestException(StatusCodes.Status204NoContent, "Change request is the same as the resource. No changes were made.");
+            }
+
+            stockItem.ProductId = request.ProductId;
+            stockItem.LocationId = request.LocationId;
+
+            await _dbContext.SaveChangesAsync();
+
+            return new StockItemDTO(stockItem);
         }
 
         public async Task<bool> DeleteAsync(int id)

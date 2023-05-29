@@ -19,26 +19,34 @@ namespace InventoryAppAPI.DAL.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<Room> GetByIdAsync(int id)
+        public async Task<RoomDTO> GetByIdAsync(int id)
         {
-            return await _dbContext.Rooms.FirstOrDefaultAsync(r => r.Id == id);
+            Room found = await _dbContext.Rooms.FirstOrDefaultAsync(r => r.Id == id);
+
+            if(found == null)
+            {
+                return null;
+            }
+
+            return new RoomDTO(found);
         }
 
-        public async Task<IEnumerable<Room>> GetListAsync(Expression<Func<Room, bool>> predicate)
+        public async Task<IEnumerable<RoomDTO>> GetListAsync(Expression<Func<Room, bool>> predicate)
         {
-            IQueryable<Room> rooms = _dbContext.Rooms.Where(predicate);
+            IQueryable<Room> query = _dbContext.Rooms.Where(predicate);
+            IEnumerable<RoomDTO> rooms = (await query.ToListAsync()).Select(r => new RoomDTO(r));
 
-            return await rooms.ToListAsync();
+            return rooms;
         }
 
-        public async Task<IEnumerable<Room>> GetListByBuildingIdAsync(int buildingId, Expression<Func<Room, bool>> predicate = default(Expression<Func<Room, bool>>))
+        public async Task<IEnumerable<RoomDTO>> GetListByBuildingIdAsync(int buildingId, Expression<Func<Room, bool>> predicate = default(Expression<Func<Room, bool>>))
         {
-            IQueryable<Room> rooms = from location in _dbContext.Locations
+            IQueryable<Room> query = from location in _dbContext.Locations
                                                 where buildingId == location.BuildingId
                                                 join room in _dbContext.Rooms on location.RoomId equals room.Id
                                                 select new Room
                                                 {
-                                                    Id = location.Id,
+                                                    Id = room.Id,
                                                     Name = room.Name,
                                                     CreatedAt = location.CreatedAt,
                                                     CreatedBy = location.CreatedBy,
@@ -48,24 +56,26 @@ namespace InventoryAppAPI.DAL.Repositories
 
             if(predicate != default(Expression<Func<Room, bool>>))
             {
-                rooms = rooms.Where(predicate);
+                query = query.Where(predicate);
             }
 
-            return await rooms.ToListAsync();
+            IEnumerable<RoomDTO> rooms = (await query.ToListAsync()).Select(r => new RoomDTO(r));
+
+            return rooms;
         }
-        public async Task<Room> AddRoomAsync(AddRoomRequest request)
+        public async Task<RoomDTO> AddRoomAsync(AddRoomRequest request)
         {
             Room room = new Room { Name = request.Name };
 
             _dbContext.Rooms.Add(room);
             await _dbContext.SaveChangesAsync();
 
-            return room;
+            return new RoomDTO(room);
         }
 
-        public async Task<Room> UpdateRoomAsync(int roomId, UpdateRoomRequest request)
+        public async Task<RoomDTO> UpdateRoomAsync(int roomId, UpdateRoomRequest request)
         {
-            Room room = await GetByIdAsync(roomId);
+            Room room = await _dbContext.Rooms.FirstOrDefaultAsync(r => r.Id == roomId);
 
             if (room == null)
             {
@@ -81,7 +91,7 @@ namespace InventoryAppAPI.DAL.Repositories
 
             await _dbContext.SaveChangesAsync();
 
-            return room;
+            return new RoomDTO(room);
         }
 
         public async Task<bool> DeleteAsync(int id)

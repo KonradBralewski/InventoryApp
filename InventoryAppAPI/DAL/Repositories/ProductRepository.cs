@@ -3,6 +3,8 @@ using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Base;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Exceptions;
+using InventoryAppAPI.Models.Requests.Add;
+using InventoryAppAPI.Models.Responses;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
@@ -17,28 +19,54 @@ namespace InventoryAppAPI.DAL.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<Product> GetByIdAsync(int id)
+        public async Task<ProductDTO> GetByIdAsync(int id)
         {
-            return await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+            Product found = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+            if(found == null)
+            {
+                return null;
+            }
+
+            return new ProductDTO(found);
         }
 
-        public async Task<IEnumerable<Product>> GetListAsync(Expression<Func<Product, bool>> predicate)
+        public async Task<IEnumerable<ProductDTO>> GetListAsync(Expression<Func<Product, bool>> predicate)
         {
-            IQueryable<Product> products = _dbContext.Products.Where(predicate);
+            IQueryable<Product> query = _dbContext.Products.Where(predicate);
+            IEnumerable<ProductDTO> products = (await query.ToListAsync()).Select(p => new ProductDTO(p));
 
-            return await products.ToListAsync();
+            return products;
         }
 
-        public async Task<Product> AddAsync(Product dto)
+        public async Task<ProductDTO> AddProductAsync(AddProductRequest request)
         {
-            _dbContext.Products.Add(dto);
+            Product product = new Product { Name = request.Name };
+
+            _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
 
-            return dto;
+            return new ProductDTO(product);
         }
-        public Task<Product> UpdateAsync(int id)
+        public async Task<ProductDTO> UpdateProductAsync(int productId, UpdateProductRequest request)
         {
-            throw new NotImplementedException();
+            Product product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == productId);
+
+            if (product == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given id could not be assosciated with any product.");
+            }
+
+            if (request.Name == product.Name)
+            {
+                throw new RequestException(StatusCodes.Status204NoContent, "Change request is the same as the resource. No changes were made.");
+            }
+
+            product.Name = request.Name;
+
+            await _dbContext.SaveChangesAsync();
+
+            return new ProductDTO(product);
         }
 
         public async Task<bool> DeleteAsync(int id)

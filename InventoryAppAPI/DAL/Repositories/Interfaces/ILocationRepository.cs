@@ -2,13 +2,15 @@
 using InventoryAppAPI.DAL.Repositories.Base;
 using InventoryAppAPI.Models.Requests.Add;
 using InventoryAppAPI.Models.Responses;
+using System.Linq.Expressions;
 
 namespace InventoryAppAPI.DAL.Repositories.Interfaces
 {
-    public interface ILocationRepository : IRepository<Location>
+    public interface ILocationRepository : IRepository<LocationDTO>
     {
         Task<IEnumerable<LocationDTO>> GetAllLocationsByBuildingIdAsync(int buildingId);
-        Task<Location> AddLocationAsync(AddLocationRequest request);
-        Task<Location> UpdateLocationAsync(int locationId, UpdateLocationRequest request);
+        Task<LocationDTO> AddLocationAsync(AddLocationRequest request);
+        Task<LocationDTO> UpdateLocationAsync(int locationId, UpdateLocationRequest request);
+        Task<IEnumerable<LocationDTO>> GetListAsync(Expression<Func<Location, bool>> predicate);
     }
 }

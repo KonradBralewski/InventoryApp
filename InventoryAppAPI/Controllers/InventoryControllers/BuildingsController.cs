@@ -1,6 +1,7 @@
 ﻿using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Models.Requests.Add;
+using InventoryAppAPI.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
 
         public async Task<IActionResult> AddBuildingAsync([FromBody] AddBuildingRequest request)
         {
-            Building addedBuilding = await _buildingRepository.AddBuildingAsync(request);
+            BuildingDTO addedBuilding = await _buildingRepository.AddBuildingAsync(request);
 
             return Created($"api/buildings/{addedBuilding.Id}", addedBuilding);
         }

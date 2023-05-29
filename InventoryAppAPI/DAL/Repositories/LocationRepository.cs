@@ -26,36 +26,42 @@ namespace InventoryAppAPI.DAL.Repositories
 
         public async Task<IEnumerable<LocationDTO>> GetAllLocationsByBuildingIdAsync(int buildingId)
         {
-            IQueryable<LocationDTO> locations = from location in _dbContext.Locations where buildingId == location.BuildingId
+            IQueryable<Location> query = from location in _dbContext.Locations
+                                             where buildingId == location.BuildingId
                                              join room in _dbContext.Rooms on location.RoomId equals room.Id
-                                             select new LocationDTO
+                                             select new Location
                                              {
                                                  Id = location.Id,
-                                                 RoomId = location.RoomId,
-                                                 Room = room,
+                                                 Building = location.Building,
                                                  BuildingId = location.BuildingId,
-                                                 CreatedAt = location.CreatedAt,
-                                                 CreatedBy = location.CreatedBy,
-                                                 ModifiedAt = location.ModifiedAt,
-                                                 ModifiedBy = location.ModifiedBy
+                                                 Room = room,
+                                                 RoomId = location.RoomId
                                              };
-    
 
-            return await locations.ToListAsync();
+            IEnumerable<LocationDTO> locations = (await query.ToListAsync()).Select(l => new LocationDTO(l));
+            return locations;
         }
-        public async Task<Location> GetByIdAsync(int id)
+        public async Task<LocationDTO> GetByIdAsync(int id)
         {
-            return await _dbContext.Locations.FirstOrDefaultAsync(l => l.Id == id);
+            Location found = await _dbContext.Locations.FirstOrDefaultAsync(l => l.Id == id);
+
+            if (found == null)
+            {
+                return null;
+            }
+
+            return new LocationDTO(found);
         }
 
-        public async Task<IEnumerable<Location>> GetListAsync(Expression<Func<Location, bool>> predicate)
+        public async Task<IEnumerable<LocationDTO>> GetListAsync(Expression<Func<Location, bool>> predicate)
         {
-            IQueryable<Location> locations = _dbContext.Locations.Where(predicate);
+            IQueryable<Location> query = _dbContext.Locations.Where(predicate);
+            IEnumerable<LocationDTO> locations = (await query.ToListAsync()).Select(l => new LocationDTO(l));
 
-            return await locations.ToListAsync();
+            return locations;
         }
 
-        public async Task<Location> AddLocationAsync(AddLocationRequest request)
+        public async Task<LocationDTO> AddLocationAsync(AddLocationRequest request)
         {
             if(await _buildingRepository.GetByIdAsync(request.BuildingId) == null)
             {
@@ -72,11 +78,11 @@ namespace InventoryAppAPI.DAL.Repositories
             _dbContext.Locations.Add(location);
             await _dbContext.SaveChangesAsync();
 
-            return location;
+            return new LocationDTO(location);
         }
-        public async Task<Location> UpdateLocationAsync(int locationId, UpdateLocationRequest request)
+        public async Task<LocationDTO> UpdateLocationAsync(int locationId, UpdateLocationRequest request)
         {
-            Location location = await GetByIdAsync(locationId);
+            Location location = await _dbContext.Locations.FirstOrDefaultAsync(l => l.Id == locationId);
 
             if (location == null)
             {
@@ -103,7 +109,7 @@ namespace InventoryAppAPI.DAL.Repositories
 
             await _dbContext.SaveChangesAsync();
 
-            return location;
+            return new LocationDTO(location);
         }
 
         public async Task<bool> DeleteAsync(int id)

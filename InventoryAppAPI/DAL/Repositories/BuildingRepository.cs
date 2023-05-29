@@ -4,6 +4,7 @@ using InventoryAppAPI.DAL.Repositories.Base;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Exceptions;
 using InventoryAppAPI.Models.Requests.Add;
+using InventoryAppAPI.Models.Responses;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
@@ -19,36 +20,47 @@ namespace InventoryAppAPI.DAL.Repositories
             _dbContext = dbContext;
         }
         
-        public async Task<IEnumerable<Building>> GetAllBuildingsAsync()
+        public async Task<IEnumerable<BuildingDTO>> GetAllBuildingsAsync()
         {
-            return await _dbContext.Buildings.ToListAsync();
+            IEnumerable<Building> buildings = await _dbContext.Buildings.ToListAsync();
+            IEnumerable<BuildingDTO> buildingsDTO = buildings.Select(b => new BuildingDTO(b));
+
+            return buildingsDTO;
         }
-        public async Task<Building> GetByIdAsync(int id)
+        public async Task<BuildingDTO> GetByIdAsync(int id)
         {
-            return await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == id);
+            Building found = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == id);
+
+            if (found == null)
+            {
+                return null;
+            }
+
+            return new BuildingDTO(found);
         }
 
-        public async Task<IEnumerable<Building>> GetListAsync(Expression<Func<Building, bool>> predicate)
+        public async Task<IEnumerable<BuildingDTO>> GetListAsync(Expression<Func<Building, bool>> predicate)
         {
-            IQueryable<Building> buildings = _dbContext.Buildings.Where(predicate);
+            IQueryable<Building> query = _dbContext.Buildings.Where(predicate);
+            IEnumerable<BuildingDTO> buildings = (await query.ToListAsync()).Select(b => new BuildingDTO(b));
 
-            return await buildings.ToListAsync();
+            return buildings;
         }
 
-        public async Task<Building> AddBuildingAsync(AddBuildingRequest request)
+        public async Task<BuildingDTO> AddBuildingAsync(AddBuildingRequest request)
         {
             Building building = new Building { Name = request.Name };
 
             _dbContext.Buildings.Add(building);
             await _dbContext.SaveChangesAsync();
 
-            return building;
+            return new BuildingDTO(building);
         }
-        public async Task<Building> UpdateBuildingAsync(int buildingId, UpdateBuildingRequest request)
+        public async Task<BuildingDTO> UpdateBuildingAsync(int buildingId, UpdateBuildingRequest request)
         {
-            Building building = await GetByIdAsync(buildingId);
+            Building building = await _dbContext.Buildings.FirstOrDefaultAsync(b => b.Id == buildingId);
 
-            if(building == null) 
+            if (building == null) 
             {
                 throw new RequestException(StatusCodes.Status404NotFound, "Given id could not be assosciated with any building.");
             }
@@ -62,7 +74,7 @@ namespace InventoryAppAPI.DAL.Repositories
 
             await _dbContext.SaveChangesAsync();
 
-            return building;
+            return new BuildingDTO(building);
         }
 
         public async Task<bool> DeleteAsync(int id)

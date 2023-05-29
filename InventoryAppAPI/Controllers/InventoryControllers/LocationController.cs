@@ -2,6 +2,7 @@
 using InventoryAppAPI.DAL.Repositories;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Models.Requests.Add;
+using InventoryAppAPI.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
 
         public async Task<IActionResult> AddLocationAsync(AddLocationRequest request)
         {
-            Location addedLocation = await _locationRepository.AddLocationAsync(request);
+            LocationDTO addedLocation = await _locationRepository.AddLocationAsync(request);
 
             return Created($"api/locations/{addedLocation.Id}", addedLocation);
         }

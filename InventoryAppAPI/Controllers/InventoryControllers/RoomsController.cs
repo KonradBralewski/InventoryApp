@@ -37,7 +37,7 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
         [HttpPost]
         public async Task<IActionResult> AddRoomAsync([FromBody] AddRoomRequest request)
         {
-            Room room = await _roomRepository.AddRoomAsync(request);
+            RoomDTO room = await _roomRepository.AddRoomAsync(request);
 
             return Created($"api/rooms/{room.Id}", room);
         }
