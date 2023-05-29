@@ -6,7 +6,7 @@ import screens from './constants/screens';
 //Screens
 import HomeScreen from './screens/HomeScreen/HomeScreen';
 import RaportScreen from './screens/RaportScreen/RaportScreen';
-import InventoryScreen from "./screens/InventoryScreen/InventoryScreen";
+import InventoryScreen from "./screens/ItemsScreen/ItemsScreen";
 
 const Tab = createBottomTabNavigator();
 

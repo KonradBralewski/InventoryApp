@@ -9,32 +9,36 @@ const styles = StyleSheet.create({
     /// Nested styles for Button component
     startButton : {
         pressableContainer : {
-            backgroundColor : 'green',
-            borderRadius : 20,
-            margin : 5,
+            borderRadius : 8,
+            margin : 2,
             marginBottom : 0,
-            padding : 5,
+            padding : 8,
             elevation : 5,
             shadowColor : 'black'
+            
         },
         insideButtonText : {
-            fontSize : 25,
-            textAlign : 'center'
+            fontSize : 22,
+            textAlign : 'center',
+            color: 'white',
+            padding: 8
         }
     },
     endButton : {
         pressableContainer : {
-            backgroundColor : 'red',
-            borderRadius : 20,
-            margin : 5,
-            marginBottom : 2,
-            padding : 5,
+            borderRadius : 8,
+            margin : 2,
+            marginBottom : 0,
+            padding : 8,
             elevation : 5,
-            shadowColor : 'black',
+            shadowColor : 'black'
+            
         },
         insideButtonText : {
-            fontSize : 25,
-            textAlign : 'center'
+            fontSize : 22,
+            textAlign : 'center',
+            color: 'white',
+            padding: 8
         }
     },
     scanButton : {
