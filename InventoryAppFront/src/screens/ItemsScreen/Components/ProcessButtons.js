@@ -2,6 +2,9 @@ import { View, TouchableOpacity, Text, Pressable} from 'react-native';
 import Button from '../../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import screens from '../../../constants/screens';
+import { LinearGradient } from 'expo-linear-gradient';
+
+
 
 //styles
 import styles from './_styles-ProcessButtons';
@@ -12,18 +15,50 @@ export default function ProcessButtons({processStarted, processEnded}){
     const homeTabConstants = screens.HomeTab;
 
     const handleStartProcess = () => {
-        if(!processStarted && !processEnded){
-            return <Button title="Rozpocznij Inwentaryzację" styles={styles.startButton}/>
+        if (!processStarted && !processEnded) {
+          return (
+            <TouchableOpacity
+              style={styles.startButton.pressableContainer}
+              onPress={() => console.log('Start process')}
+            >
+              <LinearGradient
+                colors={['#005e00', '#009200']}
+                style={styles.startButton.pressableContainer}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
+              >
+                <Text style={styles.startButton.insideButtonText}>Rozpocznij Inwentaryzację</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          );
         }
-
-        return null
+    
+        return null;
     }
 
     const handleEndProcess = () => {
         var disabled = processStarted ?  false : true
 
         if(!processEnded){
-            return <Button title="Zakończ Inwetaryzację" styles={styles.endButton} disabled={disabled}/>
+        
+            return (
+                <TouchableOpacity
+                  style={styles.endButton.pressableContainer}
+                  onPress={() => console.log('End process')}
+                  disabled={disabled}
+                >
+                  <LinearGradient
+                    colors={['#800000', '#c41414']}
+                    style={styles.endButton.pressableContainer}
+                    start={[0, 0.5]}
+                    end={[1, 0.5]}
+                  >
+                    <Text style={styles.endButton.insideButtonText}>Zakończ Inwetaryzację</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              );
+
+
         }
 
        return null
