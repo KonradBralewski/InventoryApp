@@ -51,7 +51,7 @@ export default function ItemsScreen(){
     <SafeAreaView style={styles.safeAreaContainer}>
       <InventoryProcess/>
       <View style={styles.container}>
-        <List data={items} emptyListMessage="Brak przedmiotów" iconless ={true}/>
+        <List data={items} emptyListMessage="Brak przedmiotów" iconless ={true} disabled={true}/>
       </View>
     </SafeAreaView>
   )

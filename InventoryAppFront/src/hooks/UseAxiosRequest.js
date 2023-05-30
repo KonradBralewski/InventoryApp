@@ -8,7 +8,7 @@ export const useAxiosRequest = (noun, method, statefulRun = null, reqBody = null
     const [error, setError] = useState(undefined)
     const [isLoading, setIsLoading] = useState(false)
     const [wasReseted, setWasReseted] = useState(false)
-    console.log(error)
+
     const resetHook = () => {
         setData(undefined)
         setError(undefined)

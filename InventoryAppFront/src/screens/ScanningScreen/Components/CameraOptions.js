@@ -4,11 +4,12 @@ import Button from '../../../components/Button';
 // styles
 import styles from "./_styles-CameraOptions.js"
 
-export default function CodeInfo({cameraObject}){
+export default function CodeInfo({cameraObject, reseter}){
     return (
         <View style={styles.container}>
-            <Text style={styles.scannedCodeInfo}>Read Code: {cameraObject.readCode}</Text>
-            <Button title="Skanuj ponownie" styles={styles.repeatScanButton}/>
+            {cameraObject.readCode && <Text style={styles.scannedCodeInfo}>{cameraObject.readCode}</Text>}
+            <Button title="Inwentaryzuj" styles={styles.inventoryButton}/>
+            <Button title="Skanuj ponownie" styles={styles.repeatScanButton} onPress={reseter}/>
         </View>
     );
 }
