@@ -11,7 +11,7 @@ export default function RoomsScreen({route}){
   const {buildingId} = route.params
   const homeTabConstants = screens.HomeTab;
 
-  const[data, error, isLoading, resetHook] = useAxiosRequest(`Locations/building/${buildingId}`, "get")
+  const[data, error, isLoading, resetHook] = useAxiosRequest(`api/Locations/building/${buildingId}`, "get")
 
   if(isLoading || (!data && !error)){
     return <MemoizedLoadingScreen/>

@@ -4,8 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import screens from '../../../constants/screens';
 import { LinearGradient } from 'expo-linear-gradient';
 
-
-
 //styles
 import styles from './_styles-ProcessButtons';
 
@@ -25,8 +23,7 @@ export default function ProcessButtons({processStarted, processEnded}){
                 colors={['#005e00', '#009200']}
                 style={styles.startButton.pressableContainer}
                 start={[0, 0.5]}
-                end={[1, 0.5]}
-              >
+                end={[1, 0.5]}>
                 <Text style={styles.startButton.insideButtonText}>Rozpocznij Inwentaryzację</Text>
               </LinearGradient>
             </TouchableOpacity>

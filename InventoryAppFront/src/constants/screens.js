@@ -1,4 +1,7 @@
 module.exports = {
+    "LoginTab" : {
+        displayedText : "Logowanie"
+    },
     "HomeTab" : {
         displayedText : "Home",
         "BuildingsScreen" : {

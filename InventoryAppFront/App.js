@@ -1,8 +1,11 @@
 import MainContainter from './src/MainContainter';
+import ApplicationProviders from './src/contexts/ApplicationProviders';
 
 function App(){
   return(
-    <MainContainter/>
+    <ApplicationProviders>
+      <MainContainter/>
+    </ApplicationProviders>
   );
 }
 

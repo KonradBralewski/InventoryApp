@@ -52,14 +52,18 @@ export default function ScanningScreen() {
         <MaskedView style={styles.maskContainer}
         maskElement={
           <View style={styles.maskWrapper}>
-            <View style={styles.maskView}></View>
+            <View style={styles.maskView}>
+              <View style={styles.maskViewBorder}></View>
+            </View>
           </View>
           }>
           <Camera
-            onBarCodeScanned={cameraObject.scanned ? undefined : handleBarCodeScanned}
+            onBarCodeScanned={cameraObject.scanned ? undefined : handleBarCodeScanned} autoFocus = {true}
+            barCodeScannerSettings={{barcodeSize:{width: 200, height : 200}}}
             style={styles.cameraContainer} type={cameraObject.type} ratio="16:9"/>
         </MaskedView>
       }
+      <View style={styles.scanningBorderView}></View>
       <CameraOptions cameraObject={cameraObject} reseter={resetScanning}/>
     </View>
   );

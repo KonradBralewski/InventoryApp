@@ -24,10 +24,10 @@ export default function InventoryScreen() {
         headerShown : foundSettings.isScreenHeaderVisible
       }
     }}>
-      <Stack.Screen name={homeTabConstants.ScanningScreen.screenName} component={ScanningScreen} />
       <Stack.Screen name={homeTabConstants.BuildingsScreen.screenName} component={BuildingsScreen} />
       <Stack.Screen name={homeTabConstants.RoomsScreen.screenName} component={RoomsScreen} />
       <Stack.Screen name={homeTabConstants.ItemsScreen.screenName} component={ItemsScreen} />
+      <Stack.Screen name={homeTabConstants.ScanningScreen.screenName} component={ScanningScreen} />
     </Stack.Navigator>
   );
 }

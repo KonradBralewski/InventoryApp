@@ -1,7 +1,7 @@
 import { Pressable, Text } from "react-native"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Button({styles, title, onPress, iconName, disabled}){
+export default function Button({styles, title, onPress, iconName, disabled, linearGradient}){
     return(
         <Pressable disabled={disabled} onPress={onPress} style={({pressed})=>[
             styles.pressableContainer,
@@ -13,6 +13,7 @@ export default function Button({styles, title, onPress, iconName, disabled}){
             } : {}
         ]}>
             {iconName && <Ionicons name={iconName} style={styles.insideButtonIcon}/>}
+            {linearGradient != undefined && linearGradient}
             <Text style={styles.insideButtonText}>{title}</Text>
         </Pressable>
     )
@@ -23,5 +24,6 @@ Button.defaultProps = {
     title : "DefaultTitle",
     onPress : ()=>{},
     iconName : undefined,
+    linearGradient : undefined,
     disabled : false
 }

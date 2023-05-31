@@ -11,7 +11,7 @@ export default function BuildingsScreen(){
   const navigate = useNavigation();
   const homeTabConstants = screens.HomeTab;
 
-  const[data, error, isLoading, resetHook] = useAxiosRequest("buildings", "get")
+  const[data, error, isLoading, resetHook] = useAxiosRequest("api/buildings", "get")
 
   if(isLoading || (!data && !error)){
     return <MemoizedLoadingScreen/>
