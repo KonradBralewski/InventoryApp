@@ -15,31 +15,11 @@ namespace InventoryAppAPI.DAL.Repositories
     {
         private readonly AppDbContext _dbContext;
         private readonly IBuildingRepository _buildingRepository;
-        private readonly IRoomRepository _roomRepository;
 
-        public LocationRepository(AppDbContext dbContext, IRoomRepository roomRepository = null, IBuildingRepository buildingRepository = null)
+        public LocationRepository(AppDbContext dbContext, IBuildingRepository buildingRepository)
         {
             _dbContext = dbContext;
-            _roomRepository = roomRepository;
             _buildingRepository = buildingRepository;
-        }
-
-        public async Task<IEnumerable<LocationDTO>> GetAllLocationsByBuildingIdAsync(int buildingId)
-        {
-            IQueryable<Location> query = from location in _dbContext.Locations
-                                             where buildingId == location.BuildingId
-                                             join room in _dbContext.Rooms on location.RoomId equals room.Id
-                                             select new Location
-                                             {
-                                                 Id = location.Id,
-                                                 Building = location.Building,
-                                                 BuildingId = location.BuildingId,
-                                                 Room = room,
-                                                 RoomId = location.RoomId
-                                             };
-
-            IEnumerable<LocationDTO> locations = (await query.ToListAsync()).Select(l => new LocationDTO(l));
-            return locations;
         }
         public async Task<LocationDTO> GetByIdAsync(int id)
         {
@@ -68,12 +48,12 @@ namespace InventoryAppAPI.DAL.Repositories
                 throw new RequestException(StatusCodes.Status404NotFound, "Given building id could not be assosciated with any building.");
             }
 
-            if (await _roomRepository.GetByIdAsync(request.RoomId) == null)
+            Location location = new Location
             {
-                throw new RequestException(StatusCodes.Status404NotFound, "Given room id could not be assosciated with any room.");
-            }
-
-            Location location = new Location { RoomId = request.RoomId, BuildingId = request.BuildingId};
+                RoomNo = request.RoomId,
+                BuildingId = request.BuildingId,
+                RoomDescription = request.RoomDescription
+            };
 
             _dbContext.Locations.Add(location);
             await _dbContext.SaveChangesAsync();
@@ -94,18 +74,17 @@ namespace InventoryAppAPI.DAL.Repositories
                 throw new RequestException(StatusCodes.Status404NotFound, "Given building id could not be assosciated with any building.");
             }
 
-            if (await _roomRepository.GetByIdAsync(request.RoomId) == null)
-            {
-                throw new RequestException(StatusCodes.Status404NotFound, "Given room id could not be assosciated with any room.");
-            }
 
-            if (request.RoomId == location.RoomId && request.BuildingId == location.BuildingId)
+            if (request.RoomId == location.RoomNo
+                && request.BuildingId == location.BuildingId
+                && request.RoomDescription == location.RoomDescription)
             {
                 throw new RequestException(StatusCodes.Status204NoContent, "Change request is the same as the resource. No changes were made.");
             }
 
             location.BuildingId = request.BuildingId;
-            location.RoomId = request.RoomId;
+            location.RoomNo = request.RoomId;
+            location.RoomDescription = request.RoomDescription;
 
             await _dbContext.SaveChangesAsync();
 

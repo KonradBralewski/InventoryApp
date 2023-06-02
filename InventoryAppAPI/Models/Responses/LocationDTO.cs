@@ -7,14 +7,14 @@ namespace InventoryAppAPI.Models.Responses
         public int Id { get; set; }
         public int RoomId { get; set; }
         public int BuildingId { get; set; }
-        public RoomDTO Room { get; set; }
+        public string RoomDescription { get; set; }
 
         public LocationDTO(Location location)
         {
             Id = location.Id;
-            RoomId = location.RoomId;
+            RoomId = location.RoomNo;
             BuildingId = location.BuildingId;
-            Room = new RoomDTO(location.Room);
+            RoomDescription = location.RoomDescription;
         }
     }
 }

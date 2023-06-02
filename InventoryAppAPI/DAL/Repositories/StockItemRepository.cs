@@ -25,7 +25,7 @@ namespace InventoryAppAPI.DAL.Repositories
         }
         public async Task<StockItemDTO> GetByIdAsync(int id)
         {
-            StockItems found = await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == id);
+            StockItem found = await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == id);
 
             if(found == null)
             {
@@ -35,9 +35,9 @@ namespace InventoryAppAPI.DAL.Repositories
             return new StockItemDTO(found);
         }
 
-        public async Task<IEnumerable<StockItemDTO>> GetListAsync(Expression<Func<StockItems, bool>> predicate)
+        public async Task<IEnumerable<StockItemDTO>> GetListAsync(Expression<Func<StockItem, bool>> predicate)
         {
-            IQueryable<StockItems> query = _dbContext.StockItems.Where(predicate);
+            IQueryable<StockItem> query = _dbContext.StockItems.Where(predicate);
             IEnumerable<StockItemDTO> stockItems = (await query.ToListAsync()).Select(si => new StockItemDTO(si));
 
             return stockItems;
@@ -45,7 +45,7 @@ namespace InventoryAppAPI.DAL.Repositories
 
         public async Task<StockItemDTO> AddStockItemAsync(AddStockItemRequest request)
         {
-            StockItems stockItem = new StockItems
+            StockItem stockItem = new StockItem
             {
                 Code = request.Code,
                 ProductId = request.ProductId,
@@ -61,7 +61,7 @@ namespace InventoryAppAPI.DAL.Repositories
         }
         public async Task<StockItemDTO> UpdateAsync(int stockItemId, UpdateStockItemRequest request)
         {
-            StockItems stockItem = await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == stockItemId);
+            StockItem stockItem = await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == stockItemId);
 
             if (stockItem == null)
             {
@@ -79,14 +79,17 @@ namespace InventoryAppAPI.DAL.Repositories
             }
 
             if (request.ProductId == stockItem.ProductId
-                && request.LocationId == stockItem.ProductId
-                && request.Code == stockItem.Code)
+                && request.LocationId == stockItem.LocationId
+                && request.Code == stockItem.Code
+                && request.IsArchive == stockItem.IsArchive)
             {
                 throw new RequestException(StatusCodes.Status204NoContent, "Change request is the same as the resource. No changes were made.");
             }
 
             stockItem.ProductId = request.ProductId;
             stockItem.LocationId = request.LocationId;
+            stockItem.Code = request.Code;
+            stockItem.IsArchive = request.IsArchive;
 
             await _dbContext.SaveChangesAsync();
 
@@ -95,7 +98,7 @@ namespace InventoryAppAPI.DAL.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            StockItems toBeDeleted = new StockItems { Id = id };
+            StockItem toBeDeleted = new StockItem { Id = id };
 
             _dbContext.StockItems.Attach(toBeDeleted);
             _dbContext.StockItems.Remove(toBeDeleted);

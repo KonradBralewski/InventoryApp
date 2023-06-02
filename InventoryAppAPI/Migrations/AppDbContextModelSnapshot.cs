@@ -101,7 +101,7 @@ namespace InventoryAppAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
@@ -127,6 +127,24 @@ namespace InventoryAppAPI.Migrations
                     b.ToTable("Buildings", "dict");
                 });
 
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Dicts.InventoryStatusDict", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("StatusName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InventoryStatus", "dict");
+                });
+
             modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Dicts.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -138,7 +156,7 @@ namespace InventoryAppAPI.Migrations
                     b.Property<int>("BuildingId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
@@ -154,14 +172,15 @@ namespace InventoryAppAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("RoomId")
+                    b.Property<string>("RoomDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoomNo")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BuildingId");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("Locations", "dict");
                 });
@@ -174,7 +193,7 @@ namespace InventoryAppAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
@@ -200,7 +219,7 @@ namespace InventoryAppAPI.Migrations
                     b.ToTable("Products", "dict");
                 });
 
-            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Dicts.Room", b =>
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Inventory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -208,33 +227,105 @@ namespace InventoryAppAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rooms", "dict");
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Inventories");
                 });
 
-            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.StockItems", b =>
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.InventoryStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("InventoryId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryId")
+                        .IsUnique();
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("InventoryStatus");
+                });
+
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.ScannedItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("InventoriedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("InventoriedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InventoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockItemId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("isArchive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InventoryId");
+
+                    b.HasIndex("StockItemId")
+                        .IsUnique();
+
+                    b.ToTable("ScannedItems");
+                });
+
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.StockItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -270,7 +361,7 @@ namespace InventoryAppAPI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("StockItems", (string)null);
+                    b.ToTable("StockItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -414,18 +505,59 @@ namespace InventoryAppAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryAppAPI.DAL.Entities.Dicts.Room", "Room")
+                    b.Navigation("Building");
+                });
+
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Inventory", b =>
+                {
+                    b.HasOne("InventoryAppAPI.DAL.Entities.Dicts.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("RoomId")
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Building");
-
-                    b.Navigation("Room");
+                    b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.StockItems", b =>
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.InventoryStatus", b =>
+                {
+                    b.HasOne("InventoryAppAPI.DAL.Entities.Inventory", "Inventory")
+                        .WithOne("Status")
+                        .HasForeignKey("InventoryAppAPI.DAL.Entities.InventoryStatus", "InventoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryAppAPI.DAL.Entities.Dicts.InventoryStatusDict", "InventoryStatusDict")
+                        .WithMany("InventoryStatus")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Inventory");
+
+                    b.Navigation("InventoryStatusDict");
+                });
+
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.ScannedItem", b =>
+                {
+                    b.HasOne("InventoryAppAPI.DAL.Entities.Inventory", "Inventory")
+                        .WithMany()
+                        .HasForeignKey("InventoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryAppAPI.DAL.Entities.StockItem", "StockItem")
+                        .WithOne("ScannedItem")
+                        .HasForeignKey("InventoryAppAPI.DAL.Entities.ScannedItem", "StockItemId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Inventory");
+
+                    b.Navigation("StockItem");
+                });
+
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.StockItem", b =>
                 {
                     b.HasOne("InventoryAppAPI.DAL.Entities.Dicts.Location", "Location")
                         .WithMany()
@@ -495,9 +627,24 @@ namespace InventoryAppAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Dicts.InventoryStatusDict", b =>
+                {
+                    b.Navigation("InventoryStatus");
+                });
+
             modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Dicts.Product", b =>
                 {
                     b.Navigation("StockItems");
+                });
+
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Inventory", b =>
+                {
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.StockItem", b =>
+                {
+                    b.Navigation("ScannedItem");
                 });
 #pragma warning restore 612, 618
         }

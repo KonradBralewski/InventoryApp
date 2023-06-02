@@ -6,5 +6,6 @@ namespace InventoryAppAPI.Models.Requests.Add
     {
         public int BuildingId { get; set; }
         public int RoomId { get; set; }
+        public string RoomDescription { get; set; }
     }
 }

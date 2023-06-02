@@ -7,7 +7,7 @@ namespace InventoryAppAPI.DAL.Entities.Dicts
     public class Product : BaseEntity
     {
         public string Name { get; set; }
-        public IEnumerable<StockItems> StockItems { get; set; }
+        public IEnumerable<StockItem> StockItems { get; set; }
         public DateTime? CreatedAt { get; set; }
         public string CreatedBy { get; set; }
     }

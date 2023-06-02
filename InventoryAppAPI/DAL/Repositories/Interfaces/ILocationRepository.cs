@@ -8,7 +8,6 @@ namespace InventoryAppAPI.DAL.Repositories.Interfaces
 {
     public interface ILocationRepository : IRepository<LocationDTO>
     {
-        Task<IEnumerable<LocationDTO>> GetAllLocationsByBuildingIdAsync(int buildingId);
         Task<LocationDTO> AddLocationAsync(AddLocationRequest request);
         Task<LocationDTO> UpdateLocationAsync(int locationId, UpdateLocationRequest request);
         Task<IEnumerable<LocationDTO>> GetListAsync(Expression<Func<Location, bool>> predicate);

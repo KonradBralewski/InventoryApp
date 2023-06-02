@@ -20,11 +20,22 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
         {
             _locationRepository = locationRepository;
         }
+        [HttpGet("{locationId}")]
+        public async Task<IActionResult> GetLocationByIdAsync([FromRoute] int locationId)
+        {
+            return Ok(await _locationRepository.GetByIdAsync(locationId));
+        }
 
         [HttpGet("building/{buildingId}")]
         public async Task<IActionResult> GetLocationsByBuildingIdAsync([FromRoute] int buildingId)
         {
-            return Ok(await _locationRepository.GetAllLocationsByBuildingIdAsync(buildingId));
+            return Ok(await _locationRepository.GetListAsync(l => l.BuildingId == buildingId));
+        }
+
+        [HttpGet("room/{roomId}")]
+        public async Task<IActionResult> GetLocationsByRoomIdAsync([FromRoute] int roomId)
+        {
+            return Ok(await _locationRepository.GetListAsync(l => l.RoomNo == roomId));
         }
 
         [HttpPost]

@@ -74,7 +74,6 @@ namespace InventoryAppAPI.Extensions
             services.AddScoped<IStockItemRepository, StockItemRepository>();
             services.AddScoped<IBuildingRepository, BuildingRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
-            services.AddScoped<IRoomRepository, RoomRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
             services.AddScoped<Seeder>();

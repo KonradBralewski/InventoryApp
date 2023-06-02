@@ -70,19 +70,6 @@ namespace InventoryAppAPI.DAL
 
                 if(!_context.Locations.Any())
                 {
-                    Room room = new Room
-                    {
-                        CreatedAt = DateTime.UtcNow,
-                        CreatedBy = "Admin",
-                        ModifiedAt = DateTime.UtcNow,
-                        ModifiedBy = "Admin",
-                        Name = "Room 1"
-                    };
-
-                    _context.Add(room);
-
-                    await _context.SaveChangesAsync();
-
                     Location location = new Location
                     {
                         CreatedAt = DateTime.UtcNow,
@@ -90,7 +77,8 @@ namespace InventoryAppAPI.DAL
                         ModifiedAt = DateTime.UtcNow,
                         ModifiedBy = "Admin",
                         BuildingId = 1,
-                        RoomId = 1
+                        RoomNo = 1,
+                        RoomDescription = "To jest testowy opis pokoju"
                     };
 
                     _context.Add(location);

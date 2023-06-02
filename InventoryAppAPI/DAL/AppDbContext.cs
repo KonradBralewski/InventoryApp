@@ -12,7 +12,7 @@ namespace InventoryAppAPI.DAL
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Product> Products { get; set; }
-        public DbSet<StockItems> StockItems { get; set; }
+        public DbSet<StockItem> StockItems { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Building> Buildings { get; set; }
         public DbSet<InventoryStatus> InventoryStatus { get; set; }

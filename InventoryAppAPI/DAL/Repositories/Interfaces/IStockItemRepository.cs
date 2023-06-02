@@ -9,6 +9,6 @@ namespace InventoryAppAPI.DAL.Repositories.Interfaces
     public interface IStockItemRepository : IRepository<StockItemDTO>
     {
         Task<StockItemDTO> AddStockItemAsync(AddStockItemRequest request);
-        Task<IEnumerable<StockItemDTO>> GetListAsync(Expression<Func<StockItems, bool>> predicate);
+        Task<IEnumerable<StockItemDTO>> GetListAsync(Expression<Func<StockItem, bool>> predicate);
     }
 }
