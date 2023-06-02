@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 
 export default function MainContainter({navigation}){
     const [user] = useUserContext()
-
+    console.log(user)
     return(
         <NavigationContainer>
                     <Tab.Navigator
@@ -39,7 +39,7 @@ export default function MainContainter({navigation}){
                             },
                         })}
                     >
-                    {user.token != undefined ? 
+                    {user.isSigned ? 
                     <>
                     <Tab.Screen name={screens.HomeTab.displayedText} component={HomeScreen}/>    
                     <Tab.Screen name={screens.InventoryTab.displayedText} component={InventoryScreen}/>    

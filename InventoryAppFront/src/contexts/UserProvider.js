@@ -11,10 +11,14 @@ export default function UserProvider({children}){
         token : undefined
     })
 
-    const setToken = (tokenValue) => setUser(prev => ({...prev, token : tokenValue}))
+    const updateUser = (response) => setUser({
+        email : response.email,
+        isSigned : true,
+        token : "Bearer " + response.token
+    })
 
     return (
-        <UserContext.Provider value={[user, setToken]}>
+        <UserContext.Provider value={[user, updateUser]}>
             {children}
         </UserContext.Provider>)
 }
