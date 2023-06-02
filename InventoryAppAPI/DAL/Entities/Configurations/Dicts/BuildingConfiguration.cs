@@ -12,7 +12,6 @@ namespace InventoryAppAPI.DAL.Entities.Configurations.Dicts
             eb.Property(e => e.CreatedAt).HasDefaultValueSql("getdate()");
             eb.Property(e => e.CreatedBy).HasMaxLength(100);
             eb.Property(e => e.ModifiedBy).HasMaxLength(100);
-            eb.ToTable("Buildings", "dict");
         }
     }
 }

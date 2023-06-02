@@ -8,8 +8,7 @@ namespace InventoryAppAPI.DAL.Entities.Configurations
         public void Configure(EntityTypeBuilder<StockItems> eb)
         {
             eb.Property(pc => pc.Code).HasMaxLength(100).IsRequired();
-            eb.Property(pc => pc.IsArchive).HasDefaultValue(false);
-            eb.ToTable("StockItems");
+            eb.Property(pc => pc.IsArchive).HasDefaultValue(false).IsRequired();
         }
     }
 }

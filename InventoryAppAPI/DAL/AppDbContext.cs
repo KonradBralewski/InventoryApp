@@ -15,7 +15,8 @@ namespace InventoryAppAPI.DAL
         public DbSet<StockItems> StockItems { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Building> Buildings { get; set; }
-        public DbSet<Room> Rooms { get; set; }
+        public DbSet<InventoryStatus> InventoryStatus { get; set; }
+        public DbSet<InventoryStatusDict> InventoryStatusDict { get; set; }
 
         private readonly IHttpContextAccessor _httpContextAccessor;
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
@@ -55,12 +56,6 @@ namespace InventoryAppAPI.DAL
 
             foreach (var entity in entities)
             {
-                if (entity.State == EntityState.Added)
-                {
-                    ((BaseEntity)entity.Entity).CreatedAt = currentTime;
-                    ((BaseEntity)entity.Entity).CreatedBy = requestCaller;
-                }
-
                 ((BaseEntity)entity.Entity).ModifiedAt = currentTime;
                 ((BaseEntity)entity.Entity).ModifiedBy = requestCaller;
             }

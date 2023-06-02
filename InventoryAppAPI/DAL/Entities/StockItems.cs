@@ -1,7 +1,9 @@
 ﻿using InventoryAppAPI.DAL.Entities.Dicts;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InventoryAppAPI.DAL.Entities
 {
+    [Table("StockItems")]
     public class StockItems
     {
         public int Id { get; set; }
