@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InventoryAppAPI.Migrations
 {
-    public partial class NewScheme : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -343,12 +343,13 @@ namespace InventoryAppAPI.Migrations
                         column: x => x.InventoryId,
                         principalTable: "Inventories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_ScannedItems_StockItems_StockItemId",
                         column: x => x.StockItemId,
                         principalTable: "StockItems",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateIndex(

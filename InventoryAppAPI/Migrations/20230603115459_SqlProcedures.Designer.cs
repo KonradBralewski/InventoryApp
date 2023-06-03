@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryAppAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230602165449_New Scheme")]
-    partial class NewScheme
+    [Migration("20230603115459_SqlProcedures")]
+    partial class SqlProcedures
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -551,7 +551,7 @@ namespace InventoryAppAPI.Migrations
                     b.HasOne("InventoryAppAPI.DAL.Entities.StockItem", "StockItem")
                         .WithOne("ScannedItem")
                         .HasForeignKey("InventoryAppAPI.DAL.Entities.ScannedItem", "StockItemId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Inventory");

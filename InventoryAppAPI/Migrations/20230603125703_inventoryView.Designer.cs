@@ -4,6 +4,7 @@ using InventoryAppAPI.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryAppAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230603125703_inventoryView")]
+    partial class inventoryView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,7 +249,7 @@ namespace InventoryAppAPI.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Inventories", (string)null);
+                    b.ToTable("Inventories");
                 });
 
             modelBuilder.Entity("InventoryAppAPI.DAL.Entities.InventoryStatus", b =>
@@ -282,7 +284,7 @@ namespace InventoryAppAPI.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("InventoryStatus", (string)null);
+                    b.ToTable("InventoryStatus");
                 });
 
             modelBuilder.Entity("InventoryAppAPI.DAL.Entities.ScannedItem", b =>
@@ -322,7 +324,7 @@ namespace InventoryAppAPI.Migrations
                     b.HasIndex("StockItemId")
                         .IsUnique();
 
-                    b.ToTable("ScannedItems", (string)null);
+                    b.ToTable("ScannedItems");
                 });
 
             modelBuilder.Entity("InventoryAppAPI.DAL.Entities.StockItem", b =>
@@ -361,7 +363,7 @@ namespace InventoryAppAPI.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("StockItems", (string)null);
+                    b.ToTable("StockItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

@@ -1,6 +1,7 @@
 ﻿using InventoryAppAPI.BLL.Services;
 using InventoryAppAPI.BLL.Services.Authentication;
 using InventoryAppAPI.BLL.Services.Email;
+using InventoryAppAPI.BLL.Services.Inventory;
 using InventoryAppAPI.BLL.Token;
 using InventoryAppAPI.DAL;
 using InventoryAppAPI.DAL.Entities;
@@ -70,11 +71,13 @@ namespace InventoryAppAPI.Extensions
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<ITokenManager, TokenManager>();
+            services.AddScoped<IInventoryService, InventoryService>();
 
             services.AddScoped<IStockItemRepository, StockItemRepository>();
             services.AddScoped<IBuildingRepository, BuildingRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
 
             services.AddScoped<Seeder>();
             services.AddHttpContextAccessor();

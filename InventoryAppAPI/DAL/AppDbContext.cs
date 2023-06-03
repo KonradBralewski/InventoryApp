@@ -1,6 +1,7 @@
 ﻿using InventoryAppAPI.DAL.Entities;
 using InventoryAppAPI.DAL.Entities.Base;
 using InventoryAppAPI.DAL.Entities.Dicts;
+using InventoryAppAPI.Models.Responses;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
@@ -17,6 +18,8 @@ namespace InventoryAppAPI.DAL
         public DbSet<Building> Buildings { get; set; }
         public DbSet<InventoryStatus> InventoryStatus { get; set; }
         public DbSet<InventoryStatusDict> InventoryStatusDict { get; set; }
+
+        public DbSet<InventoryDTO> InventoryView { get; set; }
 
         private readonly IHttpContextAccessor _httpContextAccessor;
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
