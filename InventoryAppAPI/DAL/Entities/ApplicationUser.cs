@@ -2,7 +2,7 @@
 
 namespace InventoryAppAPI.DAL.Entities
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<int>
     {
         public override string UserName // Treat username as email to avoid 'invalid username' creation error. Only email is needed for authentication.
         {

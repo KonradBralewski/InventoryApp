@@ -1,4 +1,5 @@
-﻿using InventoryAppAPI.DAL.Entities.Dicts;
+﻿using InventoryAppAPI.Controllers.InventoryControllers.Abstract;
+using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -6,10 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryAppAPI.Controllers.InventoryControllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    //[Authorize(Roles = "Admin, User")]
-    public class ProductsController : ControllerBase
+    public class ProductsController : InventoryAppController
     {
         private readonly IProductRepository _productRepository;
 

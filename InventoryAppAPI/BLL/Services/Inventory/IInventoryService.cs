@@ -5,6 +5,7 @@ namespace InventoryAppAPI.BLL.Services.Inventory
 {
     public interface IInventoryService
     {
-        public Task<ScannedItemDTO> ScanItem(ScanItemRequest request);
+        public Task<dynamic> ScanItem(ScanItemRequest request);
+        public Task<dynamic> StartInventoryProcess(StartInventoryProcessRequest request);
     }
 }

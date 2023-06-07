@@ -8,11 +8,11 @@ namespace InventoryAppAPI.DAL
     public class Seeder
     {
         private readonly AppDbContext _context;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _configuration;
 
-        public Seeder(AppDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public Seeder(AppDbContext context, RoleManager<IdentityRole<int>> roleManager, UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             _context = context;
             _roleManager = roleManager;
@@ -28,12 +28,12 @@ namespace InventoryAppAPI.DAL
                 {
                     if (!await _roleManager.RoleExistsAsync(UserRoles.User))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+                        await _roleManager.CreateAsync(new IdentityRole<int>(UserRoles.User));
                     }
 
                     if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+                        await _roleManager.CreateAsync(new IdentityRole<int>(UserRoles.Admin));
                     }
                 }
 
@@ -51,75 +51,6 @@ namespace InventoryAppAPI.DAL
 
                     await _userManager.AddToRoleAsync(admin, UserRoles.Admin);
                 }
-
-                if (!_context.Buildings.Any())
-                {
-                    Building building = new Building
-                    {
-                        CreatedAt = DateTime.UtcNow,
-                        CreatedBy = "Admin",
-                        ModifiedAt = DateTime.UtcNow,
-                        ModifiedBy = "Admin",
-                        Name = "Bulding 1",
-                    };
-
-                    _context.Buildings.Add(building);
-
-                    await _context.SaveChangesAsync();
-                }
-
-                if(!_context.Locations.Any())
-                {
-                    Location location = new Location
-                    {
-                        CreatedAt = DateTime.UtcNow,
-                        CreatedBy = "Admin",
-                        ModifiedAt = DateTime.UtcNow,
-                        ModifiedBy = "Admin",
-                        BuildingId = 1,
-                        RoomNo = 1,
-                        RoomDescription = "To jest testowy opis pokoju"
-                    };
-
-                    _context.Add(location);
-
-                    await _context.SaveChangesAsync();
-                }
-
-                if(!_context.Products.Any())
-                {
-                    Product product = new Product
-                    {
-                        CreatedAt = DateTime.UtcNow,
-                        CreatedBy = "Admin",
-                        ModifiedAt = DateTime.UtcNow,
-                        ModifiedBy = "Admin",
-                        Name = "Myszka"
-
-                    };
-
-                    _context.Add(product);
-
-                    await _context.SaveChangesAsync();
-                }
-
-                //if(!_context.StockItems.Any())
-                //{
-                //    StockItems stockItem = new StockItems
-                //    {
-                //        Code = "123456789",
-                //        LocationId = 1,
-                //        ProductId = 1,
-                //        IsArchive = false,
-                //        InventoriedAt = DateTime.UtcNow,
-                //        InventoriedBy = "Admin"
-                //    };
-
-                //    _context.Add(stockItem);
-
-                //    await _context.SaveChangesAsync();
-                //}
-                
             }
         }
     }

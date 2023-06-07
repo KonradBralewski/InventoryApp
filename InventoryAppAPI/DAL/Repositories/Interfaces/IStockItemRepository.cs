@@ -6,9 +6,8 @@ using System.Linq.Expressions;
 
 namespace InventoryAppAPI.DAL.Repositories.Interfaces
 {
-    public interface IStockItemRepository : IRepository<StockItemDTO>
+    public interface IStockItemRepository
     {
-        Task<StockItemDTO> AddStockItemAsync(AddStockItemRequest request);
-        Task<IEnumerable<StockItemDTO>> GetListAsync(Expression<Func<StockItem, bool>> predicate);
+        Task<IEnumerable<InventoriedStockItemDTO>> GetListAsync(int locationId);
     }
 }

@@ -13,17 +13,31 @@ namespace InventoryAppAPI.BLL.Services.Inventory
         {
             _dbContext = dbContext;
         }
+
+        public async Task<dynamic> StartInventoryProcess(StartInventoryProcessRequest request)
+        {
+            try
+            {
+                var result = await _dbContext.Database.ExecuteSqlInterpolatedAsync($@"exec UP_APP_InventoryAdd 
+                                {request.LocationId}, {request.UserId}, {request.Description}");
+                return result;
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
         public async Task<dynamic> ScanItem(ScanItemRequest request)
         {
             try
             {
-                var result = await _dbContext.Set<ScannedItemDTO>().FromSqlInterpolated($@"exec UP_APP_InventoryScanItemAdd 
-                                {request.UserId}, {request.LocationId}, {request.Code}, {request.IsArchive}").ToListAsync();
-                return result.First();
+                var result = await _dbContext.Database.ExecuteSqlInterpolatedAsync($@"exec UP_APP_InventoryScanItemAdd 
+                                {request.UserId}, {request.LocationId}, {request.Code}, {request.IsArchive}");
+                return result;
             }
             catch(Exception e)
             {
-                return null;
+                return e.Message;
             }
 
         }

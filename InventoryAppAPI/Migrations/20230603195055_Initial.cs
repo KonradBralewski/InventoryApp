@@ -16,7 +16,8 @@ namespace InventoryAppAPI.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -30,7 +31,8 @@ namespace InventoryAppAPI.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -109,7 +111,7 @@ namespace InventoryAppAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -130,7 +132,7 @@ namespace InventoryAppAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -152,7 +154,7 @@ namespace InventoryAppAPI.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -169,8 +171,8 @@ namespace InventoryAppAPI.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -193,7 +195,7 @@ namespace InventoryAppAPI.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -343,7 +345,7 @@ namespace InventoryAppAPI.Migrations
                         column: x => x.InventoryId,
                         principalTable: "Inventories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ScannedItems_StockItems_StockItemId",
                         column: x => x.StockItemId,
@@ -433,6 +435,249 @@ namespace InventoryAppAPI.Migrations
                 name: "IX_StockItems_ProductId",
                 table: "StockItems",
                 column: "ProductId");
+
+            migrationBuilder.Sql(@"CREATE or ALTER procedure [dbo].[UP_APP_InventoryAdd]
+    @LocationId int,
+    @UserId nvarchar(450),
+    @Descr nvarchar(max)
+as
+begin
+
+
+
+
+    begin tran ttt2
+
+    declare @Result bit
+    declare @userName nvarchar(100)
+    select @userName = UserName
+    from AspNetUsers
+    where Id = @UserId
+    -- body ---
+
+    IF EXISTS
+    (
+        SELECT *
+        FROM dbo.InventoryStatus as ii
+            inner join dbo.Inventories as i
+                on ii.InventoryId = i.Id
+        WHERE i.UserId = @UserId
+              and ii.IsActive = 1
+              and ii.StatusId = 1
+    )
+    begin
+
+        INSERT INTO dbo.Inventories
+        VALUES
+        (@LocationId, @UserId, 'Inwentaryzacja', @userName, SYSDATETIME())
+        declare @InventoryId int
+        select @InventoryId = SCOPE_IDENTITY()
+        INSERT INTO dbo.InventoryStatus
+        VALUES
+        (1, @InventoryId, 1, @UserId, SYSDATETIME())
+
+
+        set @Result = 1
+    END
+    else
+    BEGIN
+        set @Result = 0
+        rollback tran ttt2
+        RAISERROR('Użytkownik posiada już rozpoczętą inwentaryzację', 11, 3)
+        return
+    END
+
+
+    commit tran ttt2
+
+
+    select @Result as 'Result'
+
+
+end
+GO
+
+
+
+
+CREATE or ALTER procedure [dbo].[UP_APP_InventoryScanItemAdd]
+    @UserId nvarchar(450),
+    @LocationId int,
+    @Code nvarchar(255),
+    @isArchive bit
+as
+begin
+
+    declare @InventoryId int = NULL,
+            @UserName nvarchar(256),
+            @StockItemId int = NULL,
+            @StockItemLocationId int = NULL,
+            @Result bit
+
+
+
+
+    begin tran ttt2
+
+    select @UserName = [UserName]
+    from [dbo].[AspNetUsers]
+    where Id = @UserId
+
+    select @StockItemId = [Id]
+    from [dbo].[StockItems]
+    where Code = @Code
+
+    select @StockItemLocationId = LocationId
+    from [dbo].[StockItems]
+    where Code = @Code
+
+
+
+    select @InventoryId = inv.id
+    from [dbo].[Inventories] inv
+        inner join [dbo].[InventoryStatus] st
+            on inv.Id = st.InventoryId
+               and st.StatusId = 1
+               and st.IsActive = 1
+    where inv.UserId = @UserId
+          and inv.LocationId = @LocationId
+
+    if @InventoryId is NULL
+    begin
+        rollback tran ttt2
+        RAISERROR('Inwentaryzacja nie istnieje', 11, 3)
+        return
+    end
+
+
+
+    INSERT INTO [dbo].[ScannedItems]
+    (
+        [inventoryId],
+        [Code],
+        [StockItemId],
+        [isArchive],
+        [InventoriedBy]
+    )
+    select @InventoryId,
+           @Code,
+           @StockItemId,
+           @isArchive,
+           @UserName
+
+
+    if @StockItemId is not null
+       and @StockItemLocationId = @LocationId
+    begin
+        set @Result = 1
+    end
+    else
+    begin
+        set @Result = 0
+    end
+
+
+    if @StockItemId is not null
+       and @StockItemLocationId = @LocationId
+       and @isArchive = 1
+    begin
+        UPDATE [dbo].[StockItems]
+        set [IsArchive] = 1
+        where Code = @Code
+
+    end
+
+    if @StockItemLocationId <> @LocationId
+       and @isArchive = 1
+    begin
+        RAISERROR('Saved but not archived. Location error', 11, 3)
+        return
+    end
+
+
+
+    commit tran ttt2
+
+
+
+    select @Result as 'Result'
+
+end
+GO
+
+
+
+
+CREATE or ALTER procedure [dbo].[UP_APP_InventoryStatusSet]
+    @InventoryId int,
+    @StatusId int,
+    @UserId nvarchar(450)
+as
+begin
+
+
+    begin try
+
+        begin tran ttt2
+        declare @Result bit
+
+        -- body ---
+        declare @userName nvarchar(100)
+        select @userName = UserName
+        from AspNetUsers
+        where Id = @UserId
+
+        UPDATE dbo.InventoryStatus
+        SET IsActive = 0
+        WHERE @InventoryId = InventoryId
+        INSERT INTO dbo.InventoryStatus
+        VALUES
+        (@StatusId, @InventoryId, 1, @userName, SYSDATETIME())
+
+
+        set @Result = 1
+
+
+        commit tran ttt2
+
+    end try
+    begin catch
+
+        IF XACT_STATE() <> 0
+        begin
+            rollback tran ttt2
+        end
+
+
+        set @Result = 0
+
+
+    end catch
+
+    select @Result as 'Result'
+
+end
+GO
+");
+
+            migrationBuilder.Sql(@"create or alter view vInventoryList
+as
+select i.id as InventoryId,
+       i.LocationId as LocationId,
+       i.UserId as UserId,
+       i.[Description] as [Description],
+       invs.IsActive as IsActive,
+       invStatusCode.StatusName as StatusName
+from Inventories i
+    join InventoryStatus invs
+        on invs.InventoryId = i.Id
+    join dict.InventoryStatus invStatusCode
+        on invs.StatusId = invStatusCode.Id
+
+go
+
+");
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

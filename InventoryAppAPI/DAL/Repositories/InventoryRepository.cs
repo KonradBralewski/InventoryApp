@@ -21,15 +21,18 @@ namespace InventoryAppAPI.DAL.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<InventoryDTO> GetByIdAsync(int id)
+        public async Task<IEnumerable<InventoryDTO>> GetListAsync(int userId, bool? isActive = null)
         {
-            throw new NotImplementedException();
-        }
+            IEnumerable<InventoryDTO> inventories = await _dbContext.InventoryView.ToListAsync();
+            
+            IEnumerable<InventoryDTO> filtered = inventories.Where(inv => inv.UserId == userId);
 
-        public async Task<IEnumerable<InventoryDTO>> GetListAsync()
-        {
-            return await _dbContext.InventoryView.ToListAsync();
+            if(isActive != null)
+            {
+                filtered = filtered.Where(inv => inv.IsActive == isActive);
+            }
 
+            return filtered;
         }
 
     }

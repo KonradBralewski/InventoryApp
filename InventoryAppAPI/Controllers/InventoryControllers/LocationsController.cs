@@ -1,4 +1,5 @@
-﻿using InventoryAppAPI.DAL.Entities.Dicts;
+﻿using InventoryAppAPI.Controllers.InventoryControllers.Abstract;
+using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Models.Requests.Add;
@@ -9,10 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryAppAPI.Controllers.InventoryControllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    //[Authorize(Roles = "Admin, User")]
-    public class LocationsController : ControllerBase
+    public class LocationsController : InventoryAppController
     {
         private readonly ILocationRepository _locationRepository;
 

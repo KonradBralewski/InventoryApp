@@ -1,14 +1,12 @@
-﻿using InventoryAppAPI.DAL.Entities;
+﻿using InventoryAppAPI.Controllers.InventoryControllers.Abstract;
+using InventoryAppAPI.DAL.Entities;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace InventoryAppAPI.Controllers.InventoryControllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    //[Authorize(Roles = "Admin, User")]
-    public class StockItemsController : ControllerBase
+    public class StockItemsController : InventoryAppController
     {
         private readonly IStockItemRepository _stockItemRepository;
 
@@ -20,7 +18,7 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
         [HttpGet("location/{locationId}")]
         public async Task<IActionResult> Get([FromRoute] int locationId)
         {
-            return Ok(await _stockItemRepository.GetListAsync(si => si.LocationId == locationId));
+            return Ok(await _stockItemRepository.GetListAsync(locationId));
         }
     }
 }

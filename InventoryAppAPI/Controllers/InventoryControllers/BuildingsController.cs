@@ -1,4 +1,5 @@
-﻿using InventoryAppAPI.DAL.Entities.Dicts;
+﻿using InventoryAppAPI.Controllers.InventoryControllers.Abstract;
+using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Models.Requests.Add;
 using InventoryAppAPI.Models.Responses;
@@ -8,10 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryAppAPI.Controllers.InventoryControllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    //[Authorize(Roles = "Admin, User")]
-    public class BuildingsController : ControllerBase
+    public class BuildingsController : InventoryAppController
     {
         private readonly IBuildingRepository _buildingRepository;
 

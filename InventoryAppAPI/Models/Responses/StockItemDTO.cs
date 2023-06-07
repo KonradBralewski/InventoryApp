@@ -7,15 +7,15 @@ namespace InventoryAppAPI.Models.Responses
     {
         public int Id { get; set; }
         public string Code { get; set; }
-        public int ProductId { get; set; }
+        public ProductDTO Product { get; set; }
         public int LocationId { get; set; }
         public bool IsArchive { get; set; }
 
-        public StockItemDTO(StockItem stockItem)
+        public StockItemDTO(StockItem stockItem, Product product)
         {
             Id = stockItem.Id;
             Code = stockItem.Code;
-            ProductId = stockItem.ProductId;
+            Product = new ProductDTO(product);
             LocationId = stockItem.LocationId;
             IsArchive = stockItem.IsArchive;
         }

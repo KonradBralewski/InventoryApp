@@ -114,8 +114,8 @@ namespace InventoryAppAPI.Extensions
         public static void AddIdentity(this IServiceCollection services)
         {
             services.AddIdentityCore<ApplicationUser>()
-                .AddRoles<IdentityRole>()
-                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddRoles<IdentityRole<int>>()
+                .AddRoleManager<RoleManager<IdentityRole<int>>>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
         }

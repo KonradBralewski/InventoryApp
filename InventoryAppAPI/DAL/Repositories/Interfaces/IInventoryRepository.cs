@@ -10,6 +10,6 @@ namespace InventoryAppAPI.DAL.Repositories.Interfaces
 {
     public interface IInventoryRepository
     {
-        Task<IEnumerable<InventoryDTO>> GetListAsync();
+        Task<IEnumerable<InventoryDTO>> GetListAsync(int userId, bool? isActive = null);
     }
 }

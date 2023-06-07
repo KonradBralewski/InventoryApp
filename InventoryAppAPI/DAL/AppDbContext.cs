@@ -2,6 +2,7 @@
 using InventoryAppAPI.DAL.Entities.Base;
 using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.Models.Responses;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
@@ -10,15 +11,17 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace InventoryAppAPI.DAL
 {
-    public class AppDbContext : IdentityDbContext<ApplicationUser>
+    public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<StockItem> StockItems { get; set; }
+        public DbSet<InventoriedStockItemDTO> InventoriedStockItemsView { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Building> Buildings { get; set; }
         public DbSet<InventoryStatus> InventoryStatus { get; set; }
         public DbSet<InventoryStatusDict> InventoryStatusDict { get; set; }
 
+        public DbSet<Inventory> Inventories { get; set; }
         public DbSet<InventoryDTO> InventoryView { get; set; }
 
         private readonly IHttpContextAccessor _httpContextAccessor;

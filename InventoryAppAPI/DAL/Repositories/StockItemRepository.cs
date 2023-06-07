@@ -23,97 +23,14 @@ namespace InventoryAppAPI.DAL.Repositories
             _locationRepository = locationRepository;
             _productRepository = productRepository;
         }
-        public async Task<StockItemDTO> GetByIdAsync(int id)
+ 
+
+        public async Task<IEnumerable<InventoriedStockItemDTO>> GetListAsync(int locationId)
         {
-            StockItem found = await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == id);
+            IEnumerable<InventoriedStockItemDTO> inventoriedStockItems = await _dbContext.InventoriedStockItemsView.ToListAsync();
 
-            if(found == null)
-            {
-                return null;
-            }
-
-            return new StockItemDTO(found);
+            return inventoriedStockItems.Where(si => si.LocationId == locationId);
         }
-
-        public async Task<IEnumerable<StockItemDTO>> GetListAsync(Expression<Func<StockItem, bool>> predicate)
-        {
-            IQueryable<StockItem> query = _dbContext.StockItems.Where(predicate);
-            IEnumerable<StockItemDTO> stockItems = (await query.ToListAsync()).Select(si => new StockItemDTO(si));
-
-            return stockItems;
-        }
-
-        public async Task<StockItemDTO> AddStockItemAsync(AddStockItemRequest request)
-        {
-            StockItem stockItem = new StockItem
-            {
-                Code = request.Code,
-                ProductId = request.ProductId,
-                LocationId = request.LocationId,
-                IsArchive = request.IsArchive
-            };
-
-            _dbContext.StockItems.Add(stockItem);
-
-            await _dbContext.SaveChangesAsync();
-
-            return new StockItemDTO(stockItem);
-        }
-        public async Task<StockItemDTO> UpdateAsync(int stockItemId, UpdateStockItemRequest request)
-        {
-            StockItem stockItem = await _dbContext.StockItems.FirstOrDefaultAsync(si => si.Id == stockItemId);
-
-            if (stockItem == null)
-            {
-                throw new RequestException(StatusCodes.Status404NotFound, "Given stockItemId could not be assosciated with any location.");
-            }
-
-            if (await _locationRepository.GetByIdAsync(request.LocationId) == null)
-            {
-                throw new RequestException(StatusCodes.Status404NotFound, "Given location id could not be assosciated with any location.");
-            }
-
-            if (await _productRepository.GetByIdAsync(request.ProductId) == null)
-            {
-                throw new RequestException(StatusCodes.Status404NotFound, "Given product id could not be assosciated with any product.");
-            }
-
-            if (request.ProductId == stockItem.ProductId
-                && request.LocationId == stockItem.LocationId
-                && request.Code == stockItem.Code
-                && request.IsArchive == stockItem.IsArchive)
-            {
-                throw new RequestException(StatusCodes.Status204NoContent, "Change request is the same as the resource. No changes were made.");
-            }
-
-            stockItem.ProductId = request.ProductId;
-            stockItem.LocationId = request.LocationId;
-            stockItem.Code = request.Code;
-            stockItem.IsArchive = request.IsArchive;
-
-            await _dbContext.SaveChangesAsync();
-
-            return new StockItemDTO(stockItem);
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            StockItem toBeDeleted = new StockItem { Id = id };
-
-            _dbContext.StockItems.Attach(toBeDeleted);
-            _dbContext.StockItems.Remove(toBeDeleted);
-
-            int result = await _dbContext.SaveChangesAsync();
-
-            if (result == 0)
-            {
-                throw new RequestException(StatusCodes.Status500InternalServerError,
-                    "Could not delete product due an error. Please try again later.");
-            }
-
-            return true;
-        }
-
 
     }
 }
