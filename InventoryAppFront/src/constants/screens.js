@@ -3,26 +3,35 @@ module.exports = {
         displayedText : "Logowanie"
     },
     "HomeTab" : {
-        displayedText : "Home",
+        displayedText : "Home"
+    },
+    "InventoryTab" : {
+        displayedText : "Inventory",
+        "ActiveInventoryScreen" : {
+            screenName : "Niezakończone inwentaryzacje",
+            isScreenHeaderVisible : false,
+            headerTitleAlign : 'left'
+        },
         "BuildingsScreen" : {
             screenName : "Budynki",
-            isScreenHeaderVisible : false
+            isScreenHeaderVisible : false,
+            headerTitleAlign : 'left'
         },
         "RoomsScreen" : {
             screenName : "Pomieszczenia",
-            isScreenHeaderVisible : false
+            isScreenHeaderVisible : false,
+            headerTitleAlign : 'left'
         },
         "ItemsScreen" : {
             screenName : "Przedmioty",
-            isScreenHeaderVisible : false
+            isScreenHeaderVisible : false,
+            headerTitleAlign : 'left'
         },
         "ScanningScreen" : {
             screenName : "Skanowanie",
-            isScreenHeaderVisible : false
+            isScreenHeaderVisible : false,
+            headerTitleAlign : 'left'
         }
-    },
-    "InventoryTab" : {
-        displayedText : "Inventory"
     },
     "RaportsTab" : {
         displayedText : "Raports"

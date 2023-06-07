@@ -1,7 +1,10 @@
+import ComponentsResetersProvider from "./ComponentsUtilsProvider";
 import UserProvider from "./UserProvider";
 export default function ApplicationProviders({children}){
     return(
     <UserProvider>
-        {children}
+        <ComponentsResetersProvider>
+            {children}
+        </ComponentsResetersProvider>
     </UserProvider>)
 }

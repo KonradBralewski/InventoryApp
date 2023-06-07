@@ -5,17 +5,18 @@ const styles = StyleSheet.create({
         width : '100%',
         flexDirection : 'column',
         justifyContent : 'center',
+        alignItems : 'center'
     },
     /// Nested styles for Button component
     startButton : {
-        pressableContainer : {
+       pressableContainer : {
+            width : '90%'
+        },
+        gradientContainer : {
             borderRadius : 8,
             margin : 2,
             marginBottom : 0,
-            padding : 8,
-            elevation : 5,
-            shadowColor : 'black'
-            
+            padding : 8
         },
         insideButtonText : {
             fontSize : 22,
@@ -26,13 +27,13 @@ const styles = StyleSheet.create({
     },
     endButton : {
         pressableContainer : {
+            width : '90%',
+        },
+        gradientContainer : {
             borderRadius : 8,
             margin : 2,
             marginBottom : 0,
-            padding : 8,
-            elevation : 5,
-            shadowColor : 'black'
-            
+            padding : 8
         },
         insideButtonText : {
             fontSize : 22,

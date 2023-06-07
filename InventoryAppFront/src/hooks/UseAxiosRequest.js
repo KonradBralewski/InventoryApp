@@ -1,6 +1,9 @@
 import cfg from "../configuration.js"
 import axios from "axios"
 import { useState, useEffect} from "react"
+import { defaultUserObject, useUserContext } from '../contexts/UserProvider';
+import { getErrorCode } from "../utils/errorUtils.js";
+import errors from "../constants/errors.js";
 
 export const useAxiosRequest = (noun, method, statefulRun = null, reqBody = null) => {
 
@@ -8,7 +11,13 @@ export const useAxiosRequest = (noun, method, statefulRun = null, reqBody = null
     const [error, setError] = useState(undefined)
     const [isLoading, setIsLoading] = useState(false)
     const [wasReseted, setWasReseted] = useState(false)
-    console.log('render')
+
+    const [user, setUser] = useUserContext()
+
+    const requestHeaders ={
+        'Content-Type': 'application/json'
+    }
+
     const resetHook = () => {
         setData(undefined)
         setError(undefined)
@@ -29,18 +38,26 @@ export const useAxiosRequest = (noun, method, statefulRun = null, reqBody = null
         if(noun === null || noun === undefined) return
 
         setIsLoading(true)
+        
+        if(user.isSigned){
+            requestHeaders["Authorization"] = user.token
+        }
 
         axios(cfg.API_SERVER + noun, {
             method: method, 
             data: reqBody,
             withCredentials : true,
-            headers: {'Content-Type': 'application/json'}
+            headers : requestHeaders
         })
         .then(result => {
-            setData(result.data) 
+            setData(result.data)
+            setError(undefined)
         })
         .catch((error)=> {
             setError(error)
+            if(getErrorCode(error) == errors.NOT_AUTHORIZED){
+                setUser(defaultUserObject)
+            }
             setIsLoading(false)
         })
         .finally(()=>{

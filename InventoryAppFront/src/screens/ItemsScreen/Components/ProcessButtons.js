@@ -10,7 +10,7 @@ import styles from './_styles-ProcessButtons';
 export default function ProcessButtons({processStarted, processEnded}){
 
     const navigation = useNavigation();
-    const homeTabConstants = screens.HomeTab;
+    const inventoryTabConstants = screens.InventoryTab;
 
     const handleStartProcess = () => {
         if (!processStarted && !processEnded) {
@@ -21,7 +21,7 @@ export default function ProcessButtons({processStarted, processEnded}){
             >
               <LinearGradient
                 colors={['#005e00', '#009200']}
-                style={styles.startButton.pressableContainer}
+                style={styles.startButton.gradientContainer}
                 start={[0, 0.5]}
                 end={[1, 0.5]}>
                 <Text style={styles.startButton.insideButtonText}>Rozpocznij Inwentaryzację</Text>
@@ -46,7 +46,7 @@ export default function ProcessButtons({processStarted, processEnded}){
                 >
                   <LinearGradient
                     colors={['#800000', '#c41414']}
-                    style={styles.endButton.pressableContainer}
+                    style={styles.endButton.gradientContainer}
                     start={[0, 0.5]}
                     end={[1, 0.5]}
                   >
@@ -72,7 +72,7 @@ export default function ProcessButtons({processStarted, processEnded}){
     const handleScan = () => {
         if(processStarted && !processEnded){
             return <Button title="Skanuj" styles={styles.scanButton} iconName="scan-circle-sharp"
-            onPress={()=>navigation.navigate(homeTabConstants.ScanningScreen.screenName)}/>
+            onPress={()=>navigation.navigate(inventoryTabConstants.ScanningScreen.screenName)}/>
         }
 
         return null

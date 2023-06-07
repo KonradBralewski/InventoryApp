@@ -11,12 +11,23 @@ const styles = StyleSheet.create({
         justifyContent : 'center',
         alignItems : 'center',
     },
-    scannedCodeInfo : {
-        fontSize : 25,
-        color : 'white'
+    successPopup : {
+        container : {
+            flex : 1,
+            top : -100
+        }
+    },
+    codeInput : {
+        backgroundColor : "white",
+        width : 200,
+        textAlign : 'center',
+        height : 30,
+        borderWidth : 2,
+        fontSize : 20
     },
     inventoryButton : {
         pressableContainer : {
+            width : 200,
             margin : 5,
             marginBottom : 2,
             padding : 5,
@@ -35,6 +46,7 @@ const styles = StyleSheet.create({
     },
     repeatScanButton : {
         pressableContainer : {
+            width : 200,
             margin : 5,
             marginBottom : 2,
             padding : 5,
@@ -49,7 +61,7 @@ const styles = StyleSheet.create({
         insideButtonIcon : {
             fontSize : 35,
             alignSelf : 'center'
-        }
+        },
     }
 });
   

@@ -9,7 +9,7 @@ import ErrorScreen from '../ErrorScreen/ErrorScreen';
 export default function RoomsScreen({route}){
   const navigate = useNavigation();
   const {buildingId} = route.params
-  const homeTabConstants = screens.HomeTab;
+  const inventoryTabConstants = screens.InventoryTab;
 
   const[data, error, isLoading, resetHook] = useAxiosRequest(`api/Locations/building/${buildingId}`, "get")
 
@@ -21,9 +21,9 @@ export default function RoomsScreen({route}){
     return <ErrorScreen errorTitle ="Błąd Aplikacji"
      errorDescription="InventoryApp nie był w stanie otrzymać listy pomieszczeń." reseter={()=>{resetHook()}}/>
   }
-
-  rooms = data.map(location => ({...location.room, 
-    onItemPress: () => navigate.navigate(homeTabConstants.ItemsScreen.screenName, {roomsId: location.id})}))
+  
+  rooms = data.map(location => ({id : location.roomId, name : location.roomDescription, 
+    onItemPress: () => navigate.navigate(inventoryTabConstants.ItemsScreen.screenName, {locationId: location.id})}))
 
   return(
     <List data={rooms} headerTitle = "Wybierz Pomieszczenie" emptyListMessage="Brak Pomieszczeń" iconName={"chevron-forward-outline"}/>

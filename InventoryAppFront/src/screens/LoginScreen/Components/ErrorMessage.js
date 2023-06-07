@@ -1,20 +1,14 @@
+import { useNavigation } from "@react-navigation/native"
 import { Text } from "react-native"
+import { getErrorCode } from "../../../utils/errorUtils"
 
 export default function ErrorMessage({error, styles}){
 
-    const getErrorCode = ()=> {
-        if(!error) return 500
-        if(!error.response) return 500
-
-        return error.response.status
-    }
-
+    const navigation = useNavigation()
 
     var errorMessage = ''
 
-    switch(getErrorCode()){
-        case 500:
-            break;
+    switch(getErrorCode(error)){
         case 422:
             errorMessage = "Email lub hasło jest nieprawidłowe."
             break;
@@ -22,7 +16,8 @@ export default function ErrorMessage({error, styles}){
             break;
     }
 
-    return (<Text styles={styles}>
+    return (
+    <Text style={styles.errorMessage}>
         {errorMessage}
-           </Text>)
+    </Text>)
 }

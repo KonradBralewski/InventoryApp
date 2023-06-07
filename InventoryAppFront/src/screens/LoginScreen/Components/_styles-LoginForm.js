@@ -6,6 +6,12 @@ const styles = StyleSheet.create({
         justifyContent : 'center',
         alignItems : 'center'
     },
+    errorMessage : {
+        margin : 5,
+        color : 'red',
+        fontSize : 20,
+        fontWeight : 'bold'
+    },
     emailInput : {
         width : 200,
         height : 50,
