@@ -1,29 +1,40 @@
 import { SafeAreaView, FlatList, StyleSheet, Text, View, TouchableOpacity, Linking } from "react-native";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useAxiosRequest } from '../../hooks/UseAxiosRequest';
 import { MemoizedLoadingScreen } from '../LoadingScreen/LoadingScreen';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { downloadPdf } from "../../utils/fileUtils";
+import ErrorScreen from "../ErrorScreen/ErrorScreen";
 
 //styles
 import styles from '../../styles/_styles-RaportScreen';
 
 
-export default function RaportScreen() {
-  const navigation = useNavigation();
+export default function RaportScreen({navigation, route}) {
+  const nav = useNavigation();
 
   const[data, error, isLoading, resetHook] = useAxiosRequest("api/Reports", "get")
 
   const [shouldDownloadFile, setShouldDownloadFile] = useState(false)
   const [fileId, setFileId] = useState(undefined)
 
-  if(shouldDownloadFile && fileId != undefined){
-    downloadPdf(`api/Reports/file/${fileId}`, 'report_' + fileId)
-    .then(result => console.log(result))
-    .catch(error => console.log(error))
-    .finally(setShouldDownloadFile(false))
-  }
+  const [downloadedLatest, setDownloadedLatest] = useState(false)
+  const {shouldDisplayLatest} = route.params
+  
+  useFocusEffect(useCallback(()=>{
+    return () => {
+      resetHook()
+      navigation.setParams({
+        shouldDisplayLatest: false,
+     });
+     
+      setDownloadedLatest(false)
+      setShouldDownloadFile(false)
+      setFileId(undefined)
+    }
+  }, []))
+  // setup lifecycle listener
 
   if(isLoading || (!data && !error)){
     return <MemoizedLoadingScreen/>
@@ -31,7 +42,20 @@ export default function RaportScreen() {
 
   if(!data && error){
     return <ErrorScreen errorTitle ="Błąd Aplikacji"
-     errorDescription="InventoryApp nie był w stanie otrzymać listy budynków." reseter={()=>{resetHook()}}/>
+     errorDescription="InventoryApp nie był w stanie otrzymać listy raportów." reseter={()=>{resetHook()}}/>
+  }
+
+  if((shouldDownloadFile && fileId != undefined) || (shouldDisplayLatest && !downloadedLatest)){
+    const url = shouldDisplayLatest ? 'api/Reports/file/latest' : `api/Reports/file/${fileId}`
+    downloadPdf(url, 'report_' + fileId)
+    .then(result => console.log('File_result = ',result))
+    .catch(error => console.log('File_error = ', error))
+    .finally(()=>{
+      setShouldDownloadFile(false)
+      if(shouldDisplayLatest && !downloadedLatest){
+        setDownloadedLatest(true)
+      }
+    })
   }
 
   const reports = data.map((report, index) => {

@@ -58,6 +58,7 @@ export default function ProcessButtons({processStarted, processEnded}){
             hasAnyActiveInventory : false
         }
     }))
+      navigation.popToTop()
       navigation.navigate(screens.RaportsTab.displayedText, {shouldDisplayLatest : true})
     }
   },[startResponse, endResponse, startError, endError, isLoading])

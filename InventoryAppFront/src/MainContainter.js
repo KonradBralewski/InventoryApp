@@ -44,7 +44,7 @@ export default function MainContainter({navigation}){
                     <>
                     <Tab.Screen name={screens.HomeTab.displayedText} component={HomeScreen}/>    
                     <Tab.Screen name={screens.InventoryTab.displayedText} component={InventoryScreen}/>    
-                    <Tab.Screen name={screens.RaportsTab.displayedText} component={RaportScreen}/> 
+                    <Tab.Screen name={screens.RaportsTab.displayedText} component={RaportScreen} initialParams={{shouldDisplayLatest : false}}/> 
                     </>
                     : 
                     <>

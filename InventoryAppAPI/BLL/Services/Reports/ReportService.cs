@@ -22,7 +22,7 @@ namespace InventoryAppAPI.BLL.Services.Reports
            ,Data
            ,CreatorId)
      VALUES
-          ({inventoryId}, GETUTCDATE(), {pdf.BinaryData}, {userId})");
+          ({inventoryId}, GETDATE(), {pdf.BinaryData}, {userId})");
 
             return result;
         }
@@ -56,6 +56,18 @@ namespace InventoryAppAPI.BLL.Services.Reports
             }
 
             return found.Data;
+        }
+
+        public async Task<byte[]> GetLatestReportFile()
+        {
+            var last = await _dbContext.Files.OrderByDescending(f => f.Id).FirstOrDefaultAsync();
+
+            if (last == null)
+            {
+                throw new RequestException(StatusCodes.Status404NotFound, "Given id could not be assosciated with any report.");
+            }
+
+            return last.Data;
         }
     }
 }

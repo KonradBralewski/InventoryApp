@@ -35,5 +35,16 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
                 FileDownloadName = "test.pdf"
             };
         }
+
+        [HttpGet("file/latest")]
+        public async Task<IActionResult> GetLatestReportFile()
+        {
+            var file = await _reportService.GetLatestReportFile();
+
+            return new FileStreamResult(new MemoryStream(file), "application/pdf")
+            {
+                FileDownloadName = "test.pdf"
+            };
+        }
     }
 }

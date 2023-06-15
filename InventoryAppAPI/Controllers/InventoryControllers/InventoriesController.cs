@@ -31,11 +31,9 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
         [HttpPost("end")]
         public async Task<IActionResult> EndInventoryProcessAsync([FromBody] EndInventoryProcessRequest request)
         {
-            //request.UserId = this.GetCallerId();
-            request.UserId = 1;
-            request.LocationId = 1;
+            request.UserId = this.GetCallerId();
 
-            return await _inventoryService.EndInventoryProcess(request);
+            return Ok(await _inventoryService.EndInventoryProcess(request));
         }
 
         [HttpPost("scan")]
