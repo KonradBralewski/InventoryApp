@@ -11,6 +11,7 @@ import { MemoizedLoadingScreen } from '../LoadingScreen/LoadingScreen';
 
 // styles
 import styles from './_styles-ActiveInventoryScreen';
+import { useComponentsUtils } from '../../contexts/ComponentsUtilsProvider';
 
 
 export default function ActiveInventoryScreen({inventory}){
@@ -21,6 +22,23 @@ export default function ActiveInventoryScreen({inventory}){
     const[activeInventoryResponse, error, isLoading, resetHook] = useAxiosRequest("api/Inventories/currentUser/filter?isActive=true", "get")
 
     const [user, setUser] = useUserContext()
+    const [utils, setUtils] = useComponentsUtils()
+
+    useEffect(()=>{
+        if(isLoading) return
+        if(error) return
+        if(!activeInventoryResponse) return
+        
+        if(Object.keys(activeInventoryResponse.inventories).length == 0){
+            setUtils((prevComponentUtils) => ({
+                ...prevComponentUtils,
+                "ActiveInventoryScreen" : {
+                    hasAnyActiveInventory : false
+                }
+            }))
+        }
+        
+    }, [activeInventoryResponse, error, isLoading])
   
     if(isLoading || (!activeInventoryResponse && !error)){
       return <MemoizedLoadingScreen/>
@@ -31,9 +49,10 @@ export default function ActiveInventoryScreen({inventory}){
        errorDescription="InventoryApp nie był w stanie sprawdzić czy istnieje nie zakończona inwentaryzacja." reseter={()=>{resetHook()}}/>
     }
 
-    if(!Object.keys(activeInventoryResponse).length){
-        navigation.navigate(inventoryTabConstants.BuildingsScreen.screenName)
+    if(Object.keys(activeInventoryResponse.inventories).length == 0){
+        return null
     }
+
     const activeInventory = activeInventoryResponse.inventories[0]
     
     return(

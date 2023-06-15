@@ -34,7 +34,7 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
 
     const [shouldInventory, setShouldInventory] = useState(false)
 
-    const inventoryPayload = {
+    var inventoryPayload = {
         code : manualCodeInput,
         isArchive : false,
         locationId : utils["ItemsScreen"].locationId
@@ -53,10 +53,32 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
         reseter()
     }
 
-    console.log(response, error)
+    const utilizeProduct = () => {
+        Alert.alert(
+            "Utylizacja przedmiotu",
+            "           Zatwierdź utylizację.",
+            [{
+                text : "Zatwierdź",
+                style : "default"
+            },
+            {
+                text : "Anuluj",
+                style : "cancel"
+            }
+        ]
+        )
+    }
+
+    console.log(response, getErrorMessage(error), inventoryPayload)
     if(!response && !isLoading && error){
         Alert.alert("Błąd", getErrorMessage(error))
-    }    
+        resetHook()
+    }
+
+    if(response && !isLoading && !error){
+        resetHook() 
+        setShouldShowSucccess(true)
+    }
 
     return (
         <View style={styles.container}>
@@ -71,8 +93,11 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
                         onBlur={()=>setHasInputFocus(false)}
                         onFocus={()=>setHasInputFocus(true)}>
             </TextInput>
-            <Button title="Inwentaryzuj" styles={styles.inventoryButton} disabled={!manualCodeInput} onPress={inventoryProduct}/>
-            <Button title="Skanuj ponownie" styles={styles.repeatScanButton} onPress={()=>setShouldShowSucccess(true)}/>
+            <View style={styles.InventoryUtilizeContainer}>
+                <Button title="Inwentaryzuj" styles={styles.inventoryButton} disabled={!manualCodeInput} onPress={inventoryProduct}/>
+                <Button title="Utylizuj" styles={styles.utilizeButton} disabled={!manualCodeInput}  onPress={utilizeProduct}/>
+            </View>
+            <Button title="Skanuj ponownie" styles={styles.repeatScanButton} onPress={reseter}/>
         </View>
     );
 }

@@ -11,6 +11,10 @@ const styles = StyleSheet.create({
         justifyContent : 'center',
         alignItems : 'center',
     },
+    InventoryUtilizeContainer : {
+        flex : 1,
+        flexDirection : "row"
+    },
     successPopup : {
         container : {
             flex : 1,
@@ -27,17 +31,37 @@ const styles = StyleSheet.create({
     },
     inventoryButton : {
         pressableContainer : {
-            width : 200,
+            width : 150,
             margin : 5,
             marginBottom : 2,
             padding : 5,
             backgroundColor : 'orange'
         },
         insideButtonText : {
-            fontSize : 25,
+            fontSize : 20,
             marginTop : -5,
             textAlign : 'center',
             color : 'white'
+        },
+        insideButtonIcon : {
+            fontSize : 35,
+            alignSelf : 'center'
+        }
+    },
+    utilizeButton : {
+        pressableContainer : {
+            width : 150,
+            margin : 5,
+            marginBottom : 2,
+            padding : 5,
+            backgroundColor : 'red'
+        },
+        insideButtonText : {
+            fontSize : 20,
+            marginTop : -5,
+            textAlign : 'center',
+            color : 'white',
+            fontWeight : '500'
         },
         insideButtonIcon : {
             fontSize : 35,

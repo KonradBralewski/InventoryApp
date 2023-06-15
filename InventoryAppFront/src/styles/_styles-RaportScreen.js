@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  buildingContainer: {
+  reportContainer: {
     backgroundColor: "#D3D3D3",
     borderRadius: 10,
     marginHorizontal: 10,
@@ -32,6 +32,15 @@ const styles = StyleSheet.create({
     padding: 20,
     flexDirection: "row",
     alignItems: "center",
+  },
+  buildingRoomInfoContainer : {
+    flex : 1,
+  },
+  reportBuilding : {
+    fontSize : 15
+  },
+  reportRoom : {
+    fontSize : 15
   },
   leftContainer: {
     flex: 1,

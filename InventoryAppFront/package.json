@@ -32,7 +32,9 @@
     "react-native-screens": "~3.20.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.11",
-    "yup": "^1.2.0"
+    "yup": "^1.2.0",
+    "expo-file-system": "~15.2.2",
+    "expo-intent-launcher": "~10.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

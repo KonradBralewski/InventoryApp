@@ -7,5 +7,6 @@ namespace InventoryAppAPI.BLL.Services.Inventory
     {
         public Task<dynamic> ScanItem(ScanItemRequest request);
         public Task<dynamic> StartInventoryProcess(StartInventoryProcessRequest request);
+        public Task<dynamic> EndInventoryProcess(EndInventoryProcessRequest request);
     }
 }

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import screens from '../../constants/screens';
-import { View, Text, FlatList, DeviceEventEmitter} from 'react-native';
+import { View, Text, FlatList} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import InventoryProcess from './Components/InventoryProcess';
 import { useAxiosRequest } from '../../hooks/UseAxiosRequest';
@@ -23,14 +23,18 @@ export default function ItemsScreen({route}){
 
   const {locationId} = route.params
 
-  const[inventoryProcessResponse, inventoryProcessError] = useAxiosRequest(`api/Inventories/${locationId}`, "get")
+  const[inventoryProcessResponse, inventoryProcessError, _, resetInvHook] = useAxiosRequest(`api/Inventories/currentUser/filter?isActive=true&locationId=${locationId}`, "get")
 
-  const[data, error, isLoading, resetHook] = useAxiosRequest(`api/StockItems/location/${locationId}`, "get")
+  const[data, error, isLoading, resetItemsHook] = useAxiosRequest(`api/StockItems/location/${locationId}`, "get")
 
+  const resetHooks = () => {
+    resetItemsHook()
+    resetInvHook()
+  }
   useEffect(()=>setUtils(prev => ({
     ...prev, "ItemsScreen" : {
       ...prev["ItemsScreen"],
-      reseter : resetHook,
+      reseter : resetHooks,
       locationId : locationId
     }
   })),[]) // set reseter & locationId for ItemsScreen
@@ -41,12 +45,12 @@ export default function ItemsScreen({route}){
 
   if(!inventoryProcessResponse && inventoryProcessError){
     return <ErrorScreen errorTitle ="Błąd Aplikacji"
-     errorDescription="InventoryApp nie był w stanie otrzymać informacji o przebiegających inwentaryzacjach." reseter={()=>{resetHook()}}/>
+     errorDescription="InventoryApp nie był w stanie otrzymać informacji o przebiegających inwentaryzacjach." reseter={()=>{resetHooks()}}/>
   }
 
   if(!data && error){
     return <ErrorScreen errorTitle ="Błąd Aplikacji"
-     errorDescription="InventoryApp nie był w stanie otrzymać listy przedmiotów." reseter={()=>{resetHook()}}/>
+     errorDescription="InventoryApp nie był w stanie otrzymać listy przedmiotów." reseter={()=>{resetHooks()}}/>
   }
 
   const items = data.map(item => ({
@@ -63,8 +67,9 @@ export default function ItemsScreen({route}){
           <Text style={styles.itemText}>{item.name}</Text> 
           <Text style={styles.itemText}>{item.code}</Text>
           <View style={styles.checkboxView}>
-            {item.wasScanned && <Ionicons name="checkmark-sharp" color={"green"} size={37}/>}
+            {item.wasScanned && <Ionicons name="checkmark-sharp" color="green" size={37}/>}
           </View>
+            {item.isArchive && <Ionicons name="trash-bin-sharp" color="black" size={25} style={{marginRight : 15}}/>}
         </View>
     );
   };
@@ -76,13 +81,22 @@ export default function ItemsScreen({route}){
       </View>
     );
   };
-  
-  var processStarted = inventoryProcessResponse.inventories[0].statusName == "Started" 
-  var processEnded = inventoryProcessResponse.inventories[0].statusName == "Ended"
 
+  var processStarted = false
+  var processEnded =  false
+
+  if(Object.keys(inventoryProcessResponse.inventories).length == 0){
+    processStarted = false
+    processEnded = false
+  }
+  else{
+    processStarted = inventoryProcessResponse.inventories[0].statusName == "Started" 
+    processEnded = inventoryProcessResponse.inventories[0].statusName == "Ended"
+  }
+  
   return(
     <SafeAreaView style={styles.safeAreaContainer}>
-      <InventoryProcess processStarted={processStarted} processEnded={processEnded} itemsScreenReseter={resetHook}/>
+      {items.length > 0 && <InventoryProcess processStarted={processStarted} processEnded={processEnded} itemsScreenReseter={resetHooks}/>}
       <FlatList
         data={items}
         renderItem={(props)=><ListItem {...props}/>}

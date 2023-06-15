@@ -1,13 +1,13 @@
 ﻿using InventoryAppAPI.DAL.Entities;
 using InventoryAppAPI.DAL.Repositories.Base;
+using InventoryAppAPI.DAL.Views;
 using InventoryAppAPI.Models.Requests.Add;
-using InventoryAppAPI.Models.Responses;
 using System.Linq.Expressions;
 
 namespace InventoryAppAPI.DAL.Repositories.Interfaces
 {
     public interface IStockItemRepository
     {
-        Task<IEnumerable<InventoriedStockItemDTO>> GetListAsync(int locationId);
+        Task<IEnumerable<InventoriedStockItemView>> GetListAsync(int locationId);
     }
 }

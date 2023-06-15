@@ -18,5 +18,8 @@ export const defaultComponentsUtilsObject = {
     ItemsScreen : {
         locationId : undefined,
         reseter : undefined
+    },
+    ActiveInventoryScreen : {
+        hasAnyActiveInventory : undefined
     }
 }

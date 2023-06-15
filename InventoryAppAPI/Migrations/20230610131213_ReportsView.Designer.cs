@@ -4,6 +4,7 @@ using InventoryAppAPI.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryAppAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230610131213_ReportsView")]
+    partial class ReportsView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -412,21 +414,6 @@ namespace InventoryAppAPI.Migrations
                     b.ToView(null);
                 });
 
-            modelBuilder.Entity("InventoryAppAPI.DAL.Views.FileView", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<byte[]>("Data")
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToView("vFileList");
-                });
-
             modelBuilder.Entity("InventoryAppAPI.DAL.Views.InventoriedStockItemView", b =>
                 {
                     b.Property<int>("Id")
@@ -502,9 +489,6 @@ namespace InventoryAppAPI.Migrations
 
                     b.Property<int>("InventoryId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("ReportDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("RoomDescription")
                         .HasColumnType("nvarchar(max)");

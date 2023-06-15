@@ -1,9 +1,9 @@
 ﻿using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Entities;
 
-namespace InventoryAppAPI.Models.Responses
+namespace InventoryAppAPI.DAL.Views
 {
-    public class InventoryDTO // From SQL View
+    public class InventoryView
     {
         public int InventoryId { get; set; }
         public int BuildingId { get; set; }
@@ -14,7 +14,7 @@ namespace InventoryAppAPI.Models.Responses
         public int UserId { get; set; }
         public string Description { get; set; }
         public string StatusName { get; set; }
-        
+
         public bool IsActive { get; set; }
     }
 }

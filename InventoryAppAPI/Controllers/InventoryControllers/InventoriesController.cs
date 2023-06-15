@@ -4,6 +4,7 @@ using InventoryAppAPI.DAL.Repositories.Interfaces;
 using InventoryAppAPI.Models.Requests.Procedures;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 
 namespace InventoryAppAPI.Controllers.InventoryControllers
 {
@@ -21,8 +22,20 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
         [HttpPost("start")]
         public async Task<IActionResult> StartInventoryProcessAsync([FromBody] StartInventoryProcessRequest request)
         {
+            request.UserId = this.GetCallerId();
+
             var result = await _inventoryService.StartInventoryProcess(request);
             return Ok(result);
+        }
+
+        [HttpPost("end")]
+        public async Task<IActionResult> EndInventoryProcessAsync([FromBody] EndInventoryProcessRequest request)
+        {
+            //request.UserId = this.GetCallerId();
+            request.UserId = 1;
+            request.LocationId = 1;
+
+            return await _inventoryService.EndInventoryProcess(request);
         }
 
         [HttpPost("scan")]
@@ -50,17 +63,17 @@ namespace InventoryAppAPI.Controllers.InventoryControllers
         }
 
         [HttpGet("currentUser/filter")]
-        public async Task<IActionResult> GetCurrentUserFilteredInventories([FromQuery] bool? isActive = null)
+        public async Task<IActionResult> GetCurrentUserFilteredInventories([FromQuery] bool? isActive = null, [FromQuery] int? locationId = null)
         {
-            var result = await _inventoryRepository.GetListAsync(this.GetCallerId(), isActive);
+            var result = await _inventoryRepository.GetListAsync(this.GetCallerId(), isActive, locationId);
 
             return Ok(new { inventories = result });
         }
 
-        [HttpGet("{$userId}/filter")]
-        public async Task<IActionResult> GetFilteredInventoriesByUserId([FromRoute] int userId, [FromQuery] bool? isActive = null)
+        [HttpGet("{userId}/filter")]
+        public async Task<IActionResult> GetFilteredInventoriesByUserId([FromRoute] int userId, [FromQuery] bool? isActive = null, [FromQuery] int? locationId = null)
         {
-            var result = await _inventoryRepository.GetListAsync(userId, isActive);
+            var result = await _inventoryRepository.GetListAsync(userId, isActive, locationId);
 
             return Ok(new { inventories = result });
         }

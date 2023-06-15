@@ -1,6 +1,6 @@
-﻿namespace InventoryAppAPI.Models.Responses
+﻿namespace InventoryAppAPI.DAL.Views
 {
-    public class InventoriedStockItemDTO
+    public class InventoriedStockItemView
     {
         public int Id { get; set; }
         public int LocationId { get; set; }

@@ -1,7 +1,8 @@
 ﻿using InventoryAppAPI.DAL.Entities;
 using InventoryAppAPI.DAL.Entities.Base;
 using InventoryAppAPI.DAL.Entities.Dicts;
-using InventoryAppAPI.Models.Responses;
+using InventoryAppAPI.DAL.Procedures;
+using InventoryAppAPI.DAL.Views;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,24 @@ namespace InventoryAppAPI.DAL
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
+        // TO DO -> ADD ALL REMAINING
         public DbSet<Product> Products { get; set; }
         public DbSet<StockItem> StockItems { get; set; }
-        public DbSet<InventoriedStockItemDTO> InventoriedStockItemsView { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Building> Buildings { get; set; }
         public DbSet<InventoryStatus> InventoryStatus { get; set; }
         public DbSet<InventoryStatusDict> InventoryStatusDict { get; set; }
 
         public DbSet<Inventory> Inventories { get; set; }
-        public DbSet<InventoryDTO> InventoryView { get; set; }
+
+        public DbSet<Report> Reports { get; set; }
+
+        // NOT MAPPED SECTION
+        public DbSet<InventoriedStockItemView> InventoriedStockItemsView { get; set; }
+        public DbSet<InventoryView> InventoryView { get; set; }
+        public DbSet<GenerateReportProcedure> RawReports { get; set; }
+        public DbSet<ReportView> ReportsView { get; set; }
+        public DbSet<FileView> Files { get; set; }
 
         private readonly IHttpContextAccessor _httpContextAccessor;
         public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)

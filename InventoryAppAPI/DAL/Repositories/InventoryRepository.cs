@@ -2,10 +2,10 @@
 using InventoryAppAPI.DAL.Entities.Dicts;
 using InventoryAppAPI.DAL.Repositories.Base;
 using InventoryAppAPI.DAL.Repositories.Interfaces;
+using InventoryAppAPI.DAL.Views;
 using InventoryAppAPI.Exceptions;
 using InventoryAppAPI.Models.Requests.Add;
 using InventoryAppAPI.Models.Requests.Update;
-using InventoryAppAPI.Models.Responses;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
@@ -21,18 +21,22 @@ namespace InventoryAppAPI.DAL.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<InventoryDTO>> GetListAsync(int userId, bool? isActive = null)
+        public async Task<IEnumerable<InventoryView>> GetListAsync(int userId, bool? isActive = null, int? locationId = null)
         {
-            IEnumerable<InventoryDTO> inventories = await _dbContext.InventoryView.ToListAsync();
-            
-            IEnumerable<InventoryDTO> filtered = inventories.Where(inv => inv.UserId == userId);
+            IQueryable<InventoryView> inventoriesQuery = _dbContext.InventoryView.Where(inv => inv.UserId == userId);
 
-            if(isActive != null)
+
+            if (locationId != null)
             {
-                filtered = filtered.Where(inv => inv.IsActive == isActive);
+                inventoriesQuery = inventoriesQuery.Where(inv => inv.LocationId == locationId);
             }
 
-            return filtered;
+            if (isActive != null)
+            {
+                inventoriesQuery = inventoriesQuery.Where(inv => inv.IsActive == isActive);
+            }
+
+            return await inventoriesQuery.ToListAsync();
         }
 
     }

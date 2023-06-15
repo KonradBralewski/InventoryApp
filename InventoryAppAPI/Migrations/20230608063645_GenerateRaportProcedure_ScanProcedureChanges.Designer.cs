@@ -4,6 +4,7 @@ using InventoryAppAPI.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryAppAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230608063645_GenerateRaportProcedure_ScanProcedureChanges")]
+    partial class GenerateRaportProcedure_ScanProcedureChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -288,28 +290,6 @@ namespace InventoryAppAPI.Migrations
                     b.ToTable("InventoryStatus");
                 });
 
-            modelBuilder.Entity("InventoryAppAPI.DAL.Entities.Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Reports");
-                });
-
             modelBuilder.Entity("InventoryAppAPI.DAL.Entities.ScannedItem", b =>
                 {
                     b.Property<int>("Id")
@@ -389,45 +369,7 @@ namespace InventoryAppAPI.Migrations
                     b.ToTable("StockItems");
                 });
 
-            modelBuilder.Entity("InventoryAppAPI.DAL.Procedures.GenerateReportProcedure", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IsArchived")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IsInStock")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IsScanned")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IsTarget")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToView(null);
-                });
-
-            modelBuilder.Entity("InventoryAppAPI.DAL.Views.FileView", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<byte[]>("Data")
-                        .HasColumnType("varbinary(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToView("vFileList");
-                });
-
-            modelBuilder.Entity("InventoryAppAPI.DAL.Views.InventoriedStockItemView", b =>
+            modelBuilder.Entity("InventoryAppAPI.Models.Responses.InventoriedStockItemDTO", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -454,7 +396,7 @@ namespace InventoryAppAPI.Migrations
                     b.ToView("vInventoriedStockItemsList");
                 });
 
-            modelBuilder.Entity("InventoryAppAPI.DAL.Views.InventoryView", b =>
+            modelBuilder.Entity("InventoryAppAPI.Models.Responses.InventoryDTO", b =>
                 {
                     b.Property<int>("InventoryId")
                         .HasColumnType("int");
@@ -488,30 +430,6 @@ namespace InventoryAppAPI.Migrations
                     b.HasKey("InventoryId");
 
                     b.ToView("vInventoryList");
-                });
-
-            modelBuilder.Entity("InventoryAppAPI.DAL.Views.ReportView", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("BuildingName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("InventoryId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ReportDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RoomDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToView("vReportsList");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>

@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
 import List from "../../components/List";
 import screens from '../../constants/screens';
 import { useAxiosRequest } from '../../hooks/UseAxiosRequest';
@@ -8,8 +7,7 @@ import { MemoizedLoadingScreen } from '../LoadingScreen/LoadingScreen';
 
 
 export default function BuildingsScreen(){
-  const navigate = useNavigation();
-  const inventoryTabConstants = screens.InventoryTab;
+  const navigation = useNavigation();
 
   const[data, error, isLoading, resetHook] = useAxiosRequest("api/buildings", "get")
 
@@ -23,7 +21,7 @@ export default function BuildingsScreen(){
   }
 
   const buildings = data.map(building => ({...building, 
-    onItemPress: () => navigate.navigate(inventoryTabConstants.RoomsScreen.screenName, {buildingId: building.id})}))
+    onItemPress: () => navigation.navigate(screens.InventoryTab.RoomsScreen.screenName, {buildingId: building.id})}))
 
   return(
     <List data={buildings} headerTitle = "Wybierz Budynki" emptyListMessage="Brak budynków" iconName={"chevron-forward-outline"}/>

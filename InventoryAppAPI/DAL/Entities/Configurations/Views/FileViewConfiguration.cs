@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace InventoryAppAPI.DAL.Entities.Configurations.Views
 {
-    public class InventoriedStockItemsViewConfiguration : IEntityTypeConfiguration<InventoriedStockItemView>
-    {
-        public void Configure(EntityTypeBuilder<InventoriedStockItemView> eb)
+    public class FileViewConfiguration : IEntityTypeConfiguration<FileView>
+    {   
+        public void Configure(EntityTypeBuilder<FileView> eb)
         {
             eb.HasKey(x => x.Id);
-            eb.ToView("vInventoriedStockItemsList");
+            eb.ToView("vFileList");
         }
     }
 }

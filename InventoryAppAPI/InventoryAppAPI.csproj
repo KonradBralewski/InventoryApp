@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+		<PackageReference Include="IronPdf" Version="2023.6.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.13" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.13" />
@@ -21,6 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="DAL\Entities\Configurations\ProcedureModels\" />
+	  <Folder Include="Models\Responses\ProceduresResponse\" />
 	</ItemGroup>
 </Project>
