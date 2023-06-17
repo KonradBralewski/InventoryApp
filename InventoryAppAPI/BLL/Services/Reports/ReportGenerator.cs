@@ -93,6 +93,10 @@ namespace InventoryAppAPI.BLL.Services.ReportGeneration
         color: #FF0000;
         margin-top: 5px;
     }
+      .item-notes-archived{
+        color: #3BD972;
+        margin-top: 5px;
+    }
     </style>
   </head>
   <body>
@@ -159,8 +163,22 @@ const tableBody = document.getElementById(""table-body"")
 
             foreach (GenerateReportProcedure report in rawReports)
             {
-                note = report.IsScannedBool ? "Brak uwag" : "Przedmiot nie został zeskanowany";
-                noteClass = report.IsScannedBool ? "item-notes" : "item-notes-warning";
+                if(report.IsArchivedBool)
+                {
+                    note = "Przedmiot został zutylizowany";
+                    noteClass = "item-notes-archived";
+                }
+                else if (report.IsScannedBool)
+                {
+                    note = "Brak uwag";
+                    noteClass = "item-notes";
+                }
+                else
+                {
+                    note = "Przedmiot nie został zeskanowany";
+                    noteClass = "item-notes-warning";
+                }
+              
 
                 buildedScript += $@"const tr{id} = document.createElement(""tr"")
     var nameTd{id} = document.createElement(""td"")

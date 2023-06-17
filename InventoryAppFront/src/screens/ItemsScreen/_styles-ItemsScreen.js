@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
       padding: 20,
       fontSize: 20,
       marginTop: 5,
+      width: 150
     },
     listContainer: {
       marginTop : 2.5
@@ -41,6 +42,10 @@ const styles = StyleSheet.create({
       borderWidth : 2,
       width : 40,
       height : 40,
+      marginLeft : 'auto',
+      marginRight : 40
+    },
+    archivedView : {
       marginLeft : 'auto',
       marginRight : 40
     }

@@ -54,6 +54,9 @@ export default function RaportScreen({navigation, route}) {
       setShouldDownloadFile(false)
       if(shouldDisplayLatest && !downloadedLatest){
         setDownloadedLatest(true)
+        navigation.setParams({
+          shouldDisplayLatest: false
+       })
       }
     })
   }

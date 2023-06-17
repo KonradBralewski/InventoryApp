@@ -54,3 +54,4 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 /InventoryAppAPI/Properties/PublishProfiles
+/InventoryAppAPI/Documentation

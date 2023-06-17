@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import screens from '../../constants/screens';
-import { View, Text, FlatList} from 'react-native';
+import { View, Text, FlatList, BackHandler} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import InventoryProcess from './Components/InventoryProcess';
 import { useAxiosRequest } from '../../hooks/UseAxiosRequest';
@@ -18,7 +18,7 @@ export default function ItemsScreen({route}){
 
   const [utils, setUtils] = useComponentsUtils()
 
-  const navigate = useNavigation()
+  const navigation = useNavigation()
   const inventoryTabConstants = screens.InventoryTab
 
   const {locationId} = route.params
@@ -26,6 +26,31 @@ export default function ItemsScreen({route}){
   const[inventoryProcessResponse, inventoryProcessError, _, resetInvHook] = useAxiosRequest(`api/Inventories/currentUser/filter?isActive=true&locationId=${locationId}`, "get")
 
   const[data, error, isLoading, resetItemsHook] = useAxiosRequest(`api/StockItems/location/${locationId}`, "get")
+
+
+  useEffect(()=>{ // Custom hardware back button
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      
+      if(utils.ActiveInventoryScreen.hasAnyActiveInventory){
+        navigation.navigate(inventoryTabConstants.ActiveInventoryScreen.screenName)
+      }
+      else{
+        navigation.goBack()
+      }
+    })
+    return () => backHandler.remove()
+  }, [])
+
+  useEffect(()=>{ // make sure hasAnyActiveInventory is updated
+    if(inventoryProcessResponse && !isLoading && !inventoryProcessError){
+      setUtils((prevComponentUtils) => ({
+        ...prevComponentUtils,
+        "ActiveInventoryScreen" : {
+            hasAnyActiveInventory : true
+        }
+    }))
+    }
+  }, [])
 
   const resetHooks = () => {
     resetItemsHook()
@@ -66,10 +91,14 @@ export default function ItemsScreen({route}){
       <View style={styles.itemContainer}>
           <Text style={styles.itemText}>{item.name}</Text> 
           <Text style={styles.itemText}>{item.code}</Text>
+          {!item.isArchive && 
           <View style={styles.checkboxView}>
             {item.wasScanned && <Ionicons name="checkmark-sharp" color="green" size={37}/>}
-          </View>
-            {item.isArchive && <Ionicons name="trash-bin-sharp" color="black" size={25} style={{marginRight : 15}}/>}
+          </View>}
+          {item.isArchive && 
+          <View style={styles.archivedView}>
+            <Ionicons name="trash-bin-sharp" color="black" size={37}/>
+          </View>}
         </View>
     );
   };
@@ -90,7 +119,7 @@ export default function ItemsScreen({route}){
     processEnded = false
   }
   else{
-    processStarted = inventoryProcessResponse.inventories[0].statusName == "Started" 
+    processStarted = inventoryProcessResponse.inventories[0].statusName == "Started"
     processEnded = inventoryProcessResponse.inventories[0].statusName == "Ended"
   }
   
