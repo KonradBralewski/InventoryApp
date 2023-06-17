@@ -144,7 +144,7 @@ begin
                            1
                    end as [isTarget],
                    CASE
-                       WHEN s1.isArchive = 1 THEN
+                       WHEN s1.isArchive = 1 or s2.isArchive = 1 THEN
                            1
                        ELSE
                            0
