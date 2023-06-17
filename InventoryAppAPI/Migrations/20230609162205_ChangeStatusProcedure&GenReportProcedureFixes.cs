@@ -15,7 +15,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER procedure [dbo].[UP_APP_InventoryStatusSet]
+CREATE OR ALTER procedure [dbo].[UP_APP_InventoryStatusSet]
     @InventoryId int,
     @StatusId int,
     @UserId int
@@ -67,7 +67,7 @@ end
             migrationBuilder.Sql(@"USE InventoryAppDb
 GO
 
-ALTER procedure [dbo].[UP_APP_GenerateRap] @inventoryId int
+CREATE OR ALTER procedure [dbo].[UP_APP_GenerateRap] @inventoryId int
 as
 begin
 

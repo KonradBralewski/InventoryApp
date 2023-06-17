@@ -8,7 +8,7 @@ namespace InventoryAppAPI.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(@"CREATE procedure [dbo].[UP_APP_GenerateRap] @inventoryId int
+            migrationBuilder.Sql(@"CREATE or ALTER procedure [dbo].[UP_APP_GenerateRap] @inventoryId int
 as
 begin
 
@@ -115,7 +115,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER procedure [dbo].[UP_APP_InventoryScanItemAdd]
+CREATE OR ALTER procedure [dbo].[UP_APP_InventoryScanItemAdd]
     @UserId int,
     @LocationId int,
     @Code nvarchar(255),
