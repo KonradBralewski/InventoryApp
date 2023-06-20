@@ -57,6 +57,7 @@ export default function RaportScreen({navigation, route}) {
         navigation.setParams({
           shouldDisplayLatest: false
        })
+       resetHook()
       }
     })
   }

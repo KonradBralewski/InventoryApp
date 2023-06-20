@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import screens from '../../constants/screens';
 import { View, Text, FlatList, BackHandler} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -27,20 +27,6 @@ export default function ItemsScreen({route}){
 
   const[data, error, isLoading, resetItemsHook] = useAxiosRequest(`api/StockItems/location/${locationId}`, "get")
 
-
-  useEffect(()=>{ // Custom hardware back button
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      
-      if(utils.ActiveInventoryScreen.hasAnyActiveInventory){
-        navigation.navigate(inventoryTabConstants.ActiveInventoryScreen.screenName)
-      }
-      else{
-        navigation.goBack()
-      }
-    })
-    return () => backHandler.remove()
-  }, [])
-
   useEffect(()=>{ // make sure hasAnyActiveInventory is updated
     if(inventoryProcessResponse && !isLoading && !inventoryProcessError){
       setUtils((prevComponentUtils) => ({
@@ -50,6 +36,25 @@ export default function ItemsScreen({route}){
         }
     }))
     }
+  }, [inventoryProcessResponse, isLoading, inventoryProcessError])
+
+  useEffect(()=>{ // Custom hardware back button
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if(utils.ActiveInventoryScreen.hasAnyActiveInventory){
+        console.log('123')
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              {
+                name: inventoryTabConstants.displayedText
+              }
+            ],
+          })
+        );
+      }
+    })
+    return () => backHandler.remove()
   }, [])
 
   const resetHooks = () => {

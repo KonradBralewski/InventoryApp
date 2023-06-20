@@ -16,8 +16,20 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
     const [hasInputFocus, setHasInputFocus] = useState(false)
     const [utils, setUtils] = useComponentsUtils()
 
+    
+    const [shouldInventory, setShouldInventory] = useState(false)
+    const [inventoryPayload, setInventoryPayload] = useState({
+        code : manualCodeInput,
+        isArchive : false,
+        locationId : utils["ItemsScreen"].locationId
+    })
+
     useEffect(()=>{
         setManualCodeInput(cameraObject.readCode)
+        setInventoryPayload((prevPayload) => ({
+            ...prevPayload,
+            code : cameraObject.readCode
+        }))
     }, [cameraObject.readCode])
     
     useEffect(()=>{
@@ -31,14 +43,6 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
     useEffect(()=>{
         setHasInputBoxFocus(hasInputFocus)
     }, [hasInputFocus])
-
-    const [shouldInventory, setShouldInventory] = useState(false)
-
-    var inventoryPayload = {
-        code : manualCodeInput,
-        isArchive : false,
-        locationId : utils["ItemsScreen"].locationId
-    }
 
     const[response, error, isLoading, resetHook] = useAxiosRequest("api/Inventories/scan", "post", {
         state : shouldInventory,
@@ -59,6 +63,13 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
             "           Zatwierdź utylizację.",
             [{
                 text : "Zatwierdź",
+                onPress : ()=> {
+                    setInventoryPayload(prevPayload => ({
+                        ...prevPayload,
+                        isArchive : true
+                    }))
+                    inventoryProduct()
+                },
                 style : "default"
             },
             {
@@ -69,7 +80,6 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
         )
     }
 
-    console.log(response, getErrorMessage(error), inventoryPayload)
     if(!response && !isLoading && error){
         Alert.alert("Błąd", getErrorMessage(error))
         resetHook()
@@ -82,14 +92,22 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
 
     return (
         <View style={styles.container}>
-            {shouldShowSuccess && <MemoizedSuccessPopup setVisibility={setShouldShowSucccess} style={styles.successPopup}/>}
+            {shouldShowSuccess && <MemoizedSuccessPopup setVisibility={setShouldShowSucccess} style={{container : {
+                 flex : 1,
+                 top : hasInputFocus ? 0 : -100
+            }}}/>}
             <TextInput
                         label="manualCode"
                         placeholder='Code...'
                         placeholderTextColor="gray"
                         style={styles.codeInput}
                         value={manualCodeInput}
-                        onChangeText={newCode => setManualCodeInput(newCode)}
+                        onChangeText={newCode => {
+                            setManualCodeInput(newCode)   
+                            setInventoryPayload((prevPayload) => ({
+                            ...prevPayload,
+                            code : newCode
+                        }))}}
                         onBlur={()=>setHasInputFocus(false)}
                         onFocus={()=>setHasInputFocus(true)}>
             </TextInput>

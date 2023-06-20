@@ -23,7 +23,7 @@ export default function ActiveInventoryScreen({inventory}){
 
     const [user, setUser] = useUserContext()
     const [utils, setUtils] = useComponentsUtils()
-
+    
     useEffect(()=>{
         if(isLoading) return
         if(error) return

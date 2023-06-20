@@ -9,12 +9,14 @@ import HomeScreen from './screens/HomeScreen/HomeScreen';
 import RaportScreen from './screens/RaportScreen/RaportScreen';
 import InventoryScreen from "./screens/InventoryScreen/InventoryScreen";
 import LoginScreen from './screens/LoginScreen/LoginScreen';
+import { useComponentsUtils } from './contexts/ComponentsUtilsProvider';
 
 
 const Tab = createBottomTabNavigator();
 
 export default function MainContainter({navigation}){
     const [user] = useUserContext()
+    const [utils] = useComponentsUtils()
 
     return(
         <NavigationContainer>

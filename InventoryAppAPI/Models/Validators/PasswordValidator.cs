@@ -23,6 +23,12 @@ namespace InventoryAppAPI.Models.Validators
 
             }
 
+            if (password.Length > 16)
+            {
+                throw new RequestException(StatusCodes.Status422UnprocessableEntity, "Password is too long, the maximum number of characters is 16.");
+
+            }
+
             if (!Regex.IsMatch(password, regexPattern))
             {
                 throw new RequestException(StatusCodes.Status422UnprocessableEntity,

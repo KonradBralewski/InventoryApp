@@ -15,12 +15,6 @@ const styles = StyleSheet.create({
         flex : 1,
         flexDirection : "row"
     },
-    successPopup : {
-        container : {
-            flex : 1,
-            top : -100
-        }
-    },
     codeInput : {
         backgroundColor : "white",
         width : 200,

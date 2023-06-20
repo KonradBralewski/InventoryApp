@@ -31,7 +31,7 @@ namespace InventoryAppAPI.Controllers
         {
             var response = await _authenticationService.Register(request);
 
-            _emailService.SendEmailConfirmation(request.Email);
+           // _emailService.SendEmailConfirmation(request.Email);
 
             return Ok(await _authenticationService.Register(request));
         }

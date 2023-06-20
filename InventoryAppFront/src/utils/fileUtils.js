@@ -4,6 +4,7 @@ import cfg from "../configuration.js"
 
 
 export async function downloadPdf(url, nameToSave){ // to do -> auth header and (rewrite,replace) so it can use context
+  console.log('downloading ', url, nameToSave)
   try{
       const file = await FileSystem.downloadAsync(cfg.API_SERVER + url,
         FileSystem.cacheDirectory + nameToSave + '.pdf',

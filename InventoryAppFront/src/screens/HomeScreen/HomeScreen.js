@@ -5,7 +5,7 @@ export default function HomeScreen({navigation}){
     const [user] = useUserContext()
     return(
         <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-            <Text onPress={()=>alert('This is the Home screen')}
+            <Text
                     style={{fontSize:26, fontWeight:'bold'}}> Witaj, {user.email}
             </Text>
         </View>
