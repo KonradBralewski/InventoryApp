@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
       padding: 20,
       fontSize: 20,
       marginTop: 5,
-      width: 150
+      width : 140
     },
     listContainer: {
       marginTop : 2.5
@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
       marginHorizontal: 10,
       marginBottom: 10,
       flexDirection: "row",
-      alignItems : 'center'
+      alignItems : 'center',
+      justifyContent : "space-around"
     },
     chevronIcon: {
       marginLeft: 10,
@@ -43,11 +44,11 @@ const styles = StyleSheet.create({
       width : 40,
       height : 40,
       marginLeft : 'auto',
-      marginRight : 40
+      marginRight : 10
     },
     archivedView : {
       marginLeft : 'auto',
-      marginRight : 40
+      marginRight : 10
     }
   });
   

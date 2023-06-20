@@ -12,11 +12,13 @@ import { useComponentsUtils } from '../../contexts/ComponentsUtilsProvider';
 // styles
 import styles from "./_styles-ItemsScreen"
 import { useEffect } from 'react';
+import { useUserContext } from '../../contexts/UserProvider';
 
 
 export default function ItemsScreen({route}){
 
   const [utils, setUtils] = useComponentsUtils()
+  const [user] = useUserContext()
 
   const navigation = useNavigation()
   const inventoryTabConstants = screens.InventoryTab
@@ -103,6 +105,13 @@ export default function ItemsScreen({route}){
           {item.isArchive && 
           <View style={styles.archivedView}>
             <Ionicons name="trash-bin-sharp" color="black" size={37}/>
+          </View>}
+          {user.isAdmin && 
+          <View style={{marginRight : 10}}>
+            <Ionicons name="build-sharp" color="black" size={37} onPress={()=>{
+              navigation.navigate(screens.InventoryTab.ItemsManagementScreen.screenName,
+                 {stockItemId : item.id})
+            }}/>
           </View>}
         </View>
     );

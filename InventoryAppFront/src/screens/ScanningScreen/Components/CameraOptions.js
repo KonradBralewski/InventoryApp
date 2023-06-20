@@ -31,7 +31,7 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
             code : cameraObject.readCode
         }))
     }, [cameraObject.readCode])
-    
+    console.log(cameraObject.readCode, manualCodeInput)
     useEffect(()=>{
         const keyboardHideListener = Keyboard.addListener('keyboardDidHide', ()=>{
             Keyboard.dismiss()
@@ -115,7 +115,7 @@ export default function CameraOptions({cameraObject, reseter, setHasInputBoxFocu
                 <Button title="Inwentaryzuj" styles={styles.inventoryButton} disabled={!manualCodeInput} onPress={inventoryProduct}/>
                 <Button title="Utylizuj" styles={styles.utilizeButton} disabled={!manualCodeInput}  onPress={utilizeProduct}/>
             </View>
-            <Button title="Skanuj ponownie" styles={styles.repeatScanButton} onPress={reseter}/>
+            <Button title="Skanuj ponownie" styles={styles.repeatScanButton} onPress={()=>{reseter(); setManualCodeInput(undefined)}}/>
         </View>
     );
 }

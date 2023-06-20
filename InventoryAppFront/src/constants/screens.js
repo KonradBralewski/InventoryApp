@@ -27,6 +27,11 @@ module.exports = {
             isScreenHeaderVisible : false,
             headerTitleAlign : 'left'
         },
+        "ItemsManagementScreen" : {
+            screenName : "Modyfikuj środek trwały",
+            isScreenHeaderVisible : false,
+            headerTitleAlign : 'left'
+        },
         "ScanningScreen" : {
             screenName : "Skanowanie",
             isScreenHeaderVisible : false,
