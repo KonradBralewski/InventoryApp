@@ -43,7 +43,6 @@ export default function ItemsScreen({route}){
   useEffect(()=>{ // Custom hardware back button
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if(utils.ActiveInventoryScreen.hasAnyActiveInventory){
-        console.log('123')
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
@@ -105,13 +104,6 @@ export default function ItemsScreen({route}){
           {item.isArchive && 
           <View style={styles.archivedView}>
             <Ionicons name="trash-bin-sharp" color="black" size={37}/>
-          </View>}
-          {user.isAdmin && 
-          <View style={{marginRight : 10}}>
-            <Ionicons name="build-sharp" color="black" size={37} onPress={()=>{
-              navigation.navigate(screens.InventoryTab.ItemsManagementScreen.screenName,
-                 {stockItemId : item.id})
-            }}/>
           </View>}
         </View>
     );

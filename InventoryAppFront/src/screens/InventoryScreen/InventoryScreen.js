@@ -8,7 +8,7 @@ import ScanningScreen from '../ScanningScreen/ScanningScreen';
 import {returnObjectWithExactPropertyValue} from "../../utils/jsonUtils"
 import ActiveInventoryScreen from '../ActiveInventoryScreen/ActiveInventoryScreen';
 import { useComponentsUtils } from '../../contexts/ComponentsUtilsProvider';
-import ItemManagementScreen from '../ItemsScreen/ItemManagementScreen';
+import ItemManagementScreen from '../ItemsManagementScreen/ItemManagementScreen';
 
 export default function InventoryScreen() {
   const Stack = createStackNavigator();
@@ -38,7 +38,6 @@ export default function InventoryScreen() {
       <Stack.Screen name={inventoryTabConstants.RoomsScreen.screenName} component={RoomsScreen} />
       <Stack.Screen name={inventoryTabConstants.ItemsScreen.screenName} component={ItemsScreen} />
       <Stack.Screen name={inventoryTabConstants.ScanningScreen.screenName} component={ScanningScreen} />
-      <Stack.Screen name={inventoryTabConstants.ItemsManagementScreen.screenName} component={ItemManagementScreen}/>
     </Stack.Navigator>
   );
 }

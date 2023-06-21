@@ -9,6 +9,7 @@ import HomeScreen from './screens/HomeScreen/HomeScreen';
 import RaportScreen from './screens/RaportScreen/RaportScreen';
 import InventoryScreen from "./screens/InventoryScreen/InventoryScreen";
 import LoginScreen from './screens/LoginScreen/LoginScreen';
+import ItemManagementScreen from './screens/ItemsManagementScreen/ItemManagementScreen';
 import { useComponentsUtils } from './contexts/ComponentsUtilsProvider';
 
 
@@ -37,6 +38,9 @@ export default function MainContainter({navigation}){
                                 else if (rn === screens.LoginTab.displayedText){
                                     iconName = 'log-in-outline';
                                 }
+                                else if (rn === screens.ItemsManagementTab.displayedText){
+                                    iconName = 'build-outline'
+                                }
 
                                 return <Ionicons name={iconName} size={size} color={color} />
                             },
@@ -46,7 +50,9 @@ export default function MainContainter({navigation}){
                     <>
                     <Tab.Screen name={screens.HomeTab.displayedText} component={HomeScreen}/>    
                     <Tab.Screen name={screens.InventoryTab.displayedText} component={InventoryScreen}/>    
-                    <Tab.Screen name={screens.RaportsTab.displayedText} component={RaportScreen} initialParams={{shouldDisplayLatest : false}}/> 
+                    <Tab.Screen name={screens.RaportsTab.displayedText} component={RaportScreen} initialParams={{shouldDisplayLatest : false}}/>
+                    {user.isAdmin && <Tab.Screen name={screens.ItemsManagementTab.displayedText}
+                     component={ItemManagementScreen} initialParams={{stockItemId : undefined}}/>} 
                     </>
                     : 
                     <>
