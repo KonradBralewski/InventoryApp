@@ -5,7 +5,7 @@ import { TextInput } from "react-native"
 import ErrorScreen from "../../ErrorScreen/ErrorScreen"
 import styles from "./_styles-AddItemModal"
 import Button from "../../../components/Button"
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { CommonActions, useFocusEffect, useNavigation } from "@react-navigation/native"
 import { useAxiosRequest } from "../../../hooks/UseAxiosRequest"
 import { MemoizedLoadingScreen } from "../../LoadingScreen/LoadingScreen"
 import ErrorMessage from "../../LoginScreen/Components/ErrorMessage"
@@ -62,7 +62,16 @@ export default function AddItemModal({locationId, hideModal}) {
     useEffect(()=>{
       if(!isLoadingAdd && addResponse && !addError){
         hideModal()
-        navigation.navigate(screens.InventoryTab.BuildingsScreen.screenName)
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              {
+                name: screens.InventoryTab.displayedText
+              }
+            ],
+          })
+        );
       }
     }, [addResponse, addError, isLoadingAdd, addResetHook]) // handle OK response and navigate after adding
     console.log(addResponse, addError, isLoadingAdd, addResetHook)

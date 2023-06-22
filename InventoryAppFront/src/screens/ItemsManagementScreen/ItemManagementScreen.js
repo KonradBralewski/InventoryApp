@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import {View, Text, FlatList, TouchableOpacity, Modal, Alert} from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { CommonActions, useFocusEffect, useNavigation} from '@react-navigation/native';
 import { useUserContext } from '../../contexts/UserProvider';
 import { LinearGradient } from 'expo-linear-gradient';
 import screens from '../../constants/screens';
@@ -76,10 +76,19 @@ export default function ItemManagementScreen({route}){
         modifierFunc : setShouldMove
     }, movePayload)
     //
-    console.log(moveResponse, moveError, isLoadingMove, movePayload, room)
+    
     useEffect(()=>{
         if((!isLoadingDelete && deleteResponse && !deleteError) || (!isLoadingMove && moveResponse && !moveError)){
-            navigation.navigate(inventoryTabConstants.BuildingsScreen.screenName)
+            navigation.dispatch(
+                CommonActions.reset({
+                  index: 0,
+                  routes: [
+                    {
+                      name: inventoryTabConstants.displayedText
+                    }
+                  ],
+                })
+              );
         }
 
     }, [deleteResponse, deleteError, isLoadingDelete,
@@ -136,8 +145,8 @@ export default function ItemManagementScreen({route}){
         setRoom(id)
     }
 
-    const roomsMapped = rooms.map(location => ({id : location.roomId, name : location.roomDescription, 
-        onItemPress: () => onRoomPressed(location.roomId)}))
+    const roomsMapped = rooms.map(location => ({id : location.id, name : location.roomDescription, 
+        onItemPress: () => onRoomPressed(location.id)}))
     
       return(
         <List data={roomsMapped} emptyListMessage="Brak pomieszczeń" style={styles}/>)
