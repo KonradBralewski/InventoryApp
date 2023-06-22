@@ -77,7 +77,7 @@ export default function RaportScreen({navigation, route}) {
   const myListEmpty = () => {
     return (
       <View style={{ alignItems: "center" }}>
-        <Text style={styles.item}>Brak sal</Text>
+        <Text style={styles.item}>Brak raportów</Text>
       </View>
     );
   };

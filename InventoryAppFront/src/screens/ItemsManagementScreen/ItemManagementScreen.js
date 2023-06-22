@@ -29,12 +29,21 @@ export default function ItemManagementScreen({route}){
     const [room, setRoom] = useState(undefined)
     const [selectedItem, setSelectedItem] = useState(undefined)
 
+    const [moveInfo, setMoveInfo] = useState({
+        itemToMove : undefined,
+        desiredLocation : undefined
+    })
+
     // setup lifecycle listener
     useFocusEffect(useCallback(()=>{
         return () => {         
           setBuilding(undefined)
           setRoom(undefined)
           setSelectedItem(undefined)
+          setMoveInfo({
+            itemToMove : undefined,
+            desiredLocation : undefined
+          })
         }
       }, []))
       // setup lifecycle listener
@@ -56,11 +65,25 @@ export default function ItemManagementScreen({route}){
     })
     //
 
+    // MOVE (UPDATE)
+    const [shouldMove, setShouldMove] = useState(false)
+    const [movePayload, setMovePayload] = useState({
+        locationId : undefined
+    })
+
+    const [moveResponse, moveError, isLoadingMove] = useAxiosRequest(`api/StockItems/${moveInfo.itemToMove}`, 'patch', {
+        state : shouldMove,
+        modifierFunc : setShouldMove
+    }, movePayload)
+    //
+    console.log(moveResponse, moveError, isLoadingMove, movePayload, room)
     useEffect(()=>{
-        if(!isLoadingDelete && deleteResponse && !deleteError){
+        if((!isLoadingDelete && deleteResponse && !deleteError) || (!isLoadingMove && moveResponse && !moveError)){
             navigation.navigate(inventoryTabConstants.BuildingsScreen.screenName)
         }
-    }, [deleteResponse, deleteError, isLoadingDelete]) // useEffect handling action responses (add/delete)
+
+    }, [deleteResponse, deleteError, isLoadingDelete,
+        moveResponse, moveError, isLoadingMove]) // useEffect handling action responses (add/delete)
 
    const returnBuildingsScrollable = () => {
     if(isLoadingBuildings){
@@ -87,8 +110,34 @@ export default function ItemManagementScreen({route}){
         return null
     }
 
+    const onRoomPressed = (id) => {
+        if(moveInfo.itemToMove != undefined){
+            Alert.alert(
+                "Przenoszenie przedmiotu",
+                "           Zatwierdź przenoszenie.",
+                [{
+                    text : "Zatwierdź",
+                    onPress : ()=> {
+                        setMovePayload({
+                            locationId : id
+                        })
+                        setShouldMove(true)
+                    },
+                    style : "default"
+                },
+                {
+                    text : "Anuluj",
+                    style : "cancel"
+                }
+            ]
+            )
+            return
+        }
+        setRoom(id)
+    }
+
     const roomsMapped = rooms.map(location => ({id : location.roomId, name : location.roomDescription, 
-        onItemPress: () => setRoom(location.roomId)}))
+        onItemPress: () => onRoomPressed(location.roomId)}))
     
       return(
         <List data={roomsMapped} emptyListMessage="Brak pomieszczeń" style={styles}/>)
@@ -127,13 +176,22 @@ export default function ItemManagementScreen({route}){
               </View>}
             </TouchableOpacity>
         );}
-    
+
+    const emptyItemListResponse = () => {
+        return (
+            <View style={{ alignItems: "center" }}>
+                <Text style={{padding: 20, fontSize: 20, marginTop: 5}}>Brak przedmiotów</Text>
+            </View>
+            );
+          }
+
       return(
         <FlatList
         data={itemsMapped}
         renderItem={(props)=><ListItem {...props}/>}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.itemListContainer}
+        ListEmptyComponent= {emptyItemListResponse}
       />)
    }
 
@@ -154,6 +212,11 @@ export default function ItemManagementScreen({route}){
         return <ErrorScreen errorTitle ="Błąd Aplikacji"
      errorDescription="InventoryApp nie był skorzystać z usługi modyfikacji środków." reseter={()=>{resetBuildingsHook()}}/>
     }
+
+    if(!isLoadingMove && !moveResponse && moveError){
+         return <ErrorScreen errorTitle ="Błąd Aplikacji"
+      errorDescription="InventoryApp nie był w stanie przenieść przedmiotu przez błąd serwera." reseter={()=>{resetBuildingsHook()}}/>
+     }
 
     const backButtonHandler = () => {
         if(room){
@@ -190,6 +253,17 @@ export default function ItemManagementScreen({route}){
         ]
         )
     }
+    
+    const moveItem = () => {
+        setMoveInfo({
+            itemToMove : selectedItem,
+            desiredLocation : undefined,
+            originLocation : room
+        })
+        setSelectedItem(undefined)
+        setRoom(undefined)
+        setBuilding(undefined)
+    }
     //
 
     if(isLoadingDelete){
@@ -198,12 +272,13 @@ export default function ItemManagementScreen({route}){
 
     return(
         <View style={styles.container}>
-            {isAddingModalVisible && <AddItemModal/>}
+            {isAddingModalVisible && <AddItemModal locationId={room} hideModal={()=>setIsAddingModalVisible(false)}/>}
             {building && <Ionicons name='return-down-back' size={70} color="black" style={{marginBottom : - 30}} onPress={backButtonHandler}/>}
             <View style={styles.listsContainer}>
                 {returnConditionalList()}
             </View>
             <TouchableOpacity
+                    disabled={room === undefined}
                     style={styles.pressableContainer}
                     onPress={()=>setIsAddingModalVisible(true)}>
                     <LinearGradient
@@ -227,8 +302,9 @@ export default function ItemManagementScreen({route}){
                     </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity
+                    disabled={selectedItem === undefined}
                     style={styles.pressableContainer}
-                    onPress={()=>{}}>
+                    onPress={moveItem}>
                     <LinearGradient
                         start={{ x: 0, y: 0 }}
                         end={{x: 1, y: 1 }}

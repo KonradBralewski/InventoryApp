@@ -81,10 +81,11 @@ namespace InventoryAppAPI.DAL.Repositories
                 throw new RequestException(StatusCodes.Status204NoContent, "Change request is the same as the resource. No changes were made.");
             }
 
-            stockItem.Code = request.Code;
-            stockItem.IsArchive = request.IsArchive;
-            stockItem.LocationId = request.LocationId;
-            stockItem.ProductId = request.ProductId;
+            if (request.Code != null) { stockItem.Code = (string)request.Code; }
+            if(request.IsArchive != null) { stockItem.IsArchive = (bool)request.IsArchive; }
+            if(request.LocationId != null) { stockItem.LocationId = (int)request.LocationId; }
+            if(request.ProductId != null) { stockItem.ProductId = (int)request.ProductId; }
+     
 
             await _dbContext.SaveChangesAsync();
 

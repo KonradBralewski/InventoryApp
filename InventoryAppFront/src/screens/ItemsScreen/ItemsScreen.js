@@ -1,6 +1,6 @@
 import { useNavigation, CommonActions } from '@react-navigation/native';
 import screens from '../../constants/screens';
-import { View, Text, FlatList, BackHandler} from 'react-native';
+import { View, Text, FlatList, BackHandler, StyleSheet} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import InventoryProcess from './Components/InventoryProcess';
 import { useAxiosRequest } from '../../hooks/UseAxiosRequest';
@@ -30,7 +30,8 @@ export default function ItemsScreen({route}){
   const[data, error, isLoading, resetItemsHook] = useAxiosRequest(`api/StockItems/location/${locationId}`, "get")
 
   useEffect(()=>{ // make sure hasAnyActiveInventory is updated
-    if(inventoryProcessResponse && !isLoading && !inventoryProcessError){
+    if(inventoryProcessResponse && !isLoading && !inventoryProcessError
+      && Object.keys(inventoryProcessResponse.inventories).length > 0){
       setUtils((prevComponentUtils) => ({
         ...prevComponentUtils,
         "ActiveInventoryScreen" : {
@@ -43,6 +44,7 @@ export default function ItemsScreen({route}){
   useEffect(()=>{ // Custom hardware back button
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if(utils.ActiveInventoryScreen.hasAnyActiveInventory){
+
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
@@ -112,7 +114,7 @@ export default function ItemsScreen({route}){
   const EmptyListView = () => {
     return (
       <View style={{ alignItems: "center" }}>
-        <Text style={styles.itemText}>Lista przedmiotów jest pusta.</Text>
+        <Text style={{fontSize : 25}}>Brak przedmiotów</Text>
       </View>
     );
   };
