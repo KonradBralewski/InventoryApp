@@ -7,7 +7,7 @@ namespace InventoryAppAPI.Controllers.InventoryControllers.Abstract
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin, User")]
+    [Authorize(Roles = "Admin, User")]
     public abstract class InventoryAppController : ControllerBase
     {
         protected int GetCallerId()
